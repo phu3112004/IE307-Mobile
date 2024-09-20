@@ -2,7 +2,8 @@
 
 # dependencies
 node_modules/
-
+.vscode
+.idea
 # Expo
 .expo/
 dist/
@@ -33,3 +34,8 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# some file no use
+Cal.js 
+Login.js
+Register.js
