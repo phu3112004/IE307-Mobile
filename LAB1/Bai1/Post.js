@@ -40,6 +40,7 @@ function Post(props) {
           {share === 1 || share === 0 ? share + " Share" : share + " Shares"}
         </Text>
       </View>
+      <View style={styles.divide} />
       <View style={styles.reaction}>
         <TouchableOpacity
           underlayColor="#ccc"
@@ -53,7 +54,14 @@ function Post(props) {
               size={20}
               color={isLiked ? "red" : "black"}
             />
-            <Text style={styles.reactionText}>Likes</Text>
+            <Text
+              style={[
+                styles.reactionText,
+                { color: isLiked ? "red" : "black" },
+              ]}
+            >
+              Likes
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
@@ -123,11 +131,14 @@ const styles = StyleSheet.create({
   reactionCountText: {
     color: "#c2c2c2",
   },
+  divide: {
+    height: 1,
+    width: "100%",
+    backgroundColor: "#c2c2c2",
+  },
   reaction: {
     flexDirection: "row",
     justifyContent: "space-between",
-    borderTopColor: "#c2c2c2",
-    borderTopWidth: 1,
     paddingTop: 24,
     paddingBottom: 14,
   },

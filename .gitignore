@@ -35,7 +35,4 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-# some file no use
-Cal.js 
-Login.js
-Register.js
+# some file no use 
