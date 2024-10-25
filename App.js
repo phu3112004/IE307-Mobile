@@ -1,6 +1,4 @@
-import Media from "./LAB1/Bai1/Media";
-import Exercise from "./LAB1/Bai2/Exercise";
-import Hoa from "./LyThuyet/Hoa";
+import Main from "./LAB2/Bai3/Main";
 export default function App() {
-  return <Hoa />;
+  return <Main />;
 }
