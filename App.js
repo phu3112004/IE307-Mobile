@@ -1,4 +1,4 @@
-import Main from "./LAB2/Bai3/Main";
+import Main from "./LAB3/Bai1/Main";
 export default function App() {
   return <Main />;
 }
