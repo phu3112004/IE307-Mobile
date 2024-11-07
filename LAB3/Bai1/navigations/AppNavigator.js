@@ -5,13 +5,15 @@ import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeDetailsScreen from "../screens/HomeDetailsScreen";
+import NotificationDetailsScreen from "../screens/NotificationDetailsScreen";
+import HomeDrawerNavigator from "./HomeDrawerNavigator";
 
 const Stack = createStackNavigator();
 const AppNavigator = () => {
   const { userToken } = useContext(AuthContext);
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="AuthStack">
         <Stack.Screen
           name="MainTab"
           component={MainTab}
@@ -26,6 +28,16 @@ const AppNavigator = () => {
           name="HomeDetails"
           component={HomeDetailsScreen}
           options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="NotificationDetailsScreen"
+          component={NotificationDetailsScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="HomeDrawers"
+          component={HomeDrawerNavigator}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

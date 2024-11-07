@@ -1,18 +1,18 @@
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import Home from "../screens/HomeScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
 import HelpsScreen from "../screens/HelpsScreen";
 import Icon from "react-native-vector-icons/FontAwesome";
+import HomeScreen from "../screens/HomeScreen";
 
 const Drawer = createDrawerNavigator();
 
 const HomeDrawerNavigator = () => {
   return (
-    <Drawer.Navigator initialRouteName="Home">
+    <Drawer.Navigator initialRouteName="Home ">
       <Drawer.Screen
-        name="Home"
-        component={Home}
+        name="Home "
+        component={HomeScreen}
         options={{
           drawerIcon: ({ color }) => (
             <Icon name="home" size={20} color={color} />
