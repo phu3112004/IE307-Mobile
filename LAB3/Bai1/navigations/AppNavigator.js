@@ -1,9 +1,9 @@
 import { NavigationContainer } from "@react-navigation/native";
-import MainTab from "./MainTab";
-import AuthStack from "./AuthStack";
 import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import MainTab from "./MainTab";
+import AuthStack from "./AuthStack";
 import HomeDetailsScreen from "../screens/HomeDetailsScreen";
 import NotificationDetailsScreen from "../screens/NotificationDetailsScreen";
 import HomeDrawerNavigator from "./HomeDrawerNavigator";

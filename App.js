@@ -1,4 +1,4 @@
-import Main from "./LAB3/Bai1/Main";
+import Application from "./LAB3/Bai2/Application";
 export default function App() {
-  return <Main />;
+  return <Application />;
 }

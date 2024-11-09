@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 export default function Categories3Screen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Categories3 Screen</Text>
+      <Text style={styles.title}>Categories3</Text>
     </View>
   );
 }

@@ -1,13 +1,14 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import HomeDrawerNavigator from "./HomeDrawerNavigator";
 import CategoryScreen from "../screens/CategoryScreen";
 import FavoriteScreen from "../screens/FavoriteScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import Icon from "react-native-vector-icons/FontAwesome";
 import FavoriteIconWithBadge from "../badge/FavoriteIconWithBadge";
-import HomeDrawerNavigator from "./HomeDrawerNavigator";
 
 const Tab = createBottomTabNavigator();
+
 export default function MainTab() {
   return (
     <Tab.Navigator
