@@ -46,7 +46,7 @@ export default function NoteInput({
     <ThemeView style={styles.container}>
       <TextInput
         style={[styles.input, { fontSize: fontSize, color: colors.text }]}
-        placeholder="Title"
+        placeholder="Enter your title"
         value={title}
         onChangeText={setTitle}
         placeholderTextColor={isDarkMode ? "white" : "black"}
@@ -57,7 +57,7 @@ export default function NoteInput({
           { height: 120 },
           { fontSize: fontSize, color: colors.text },
         ]}
-        placeholder="Content"
+        placeholder="Enter your note"
         value={content}
         onChangeText={setContent}
         placeholderTextColor={isDarkMode ? "white" : "black"}
@@ -68,13 +68,21 @@ export default function NoteInput({
           style={styles.actionBtn}
           onPress={() => navigation.goBack()}
         >
-          <Icon name="close" size={30} color={colors.text} />
+          <Icon
+            name="close"
+            size={fontSize}
+            color={isDarkMode ? "black" : "white"}
+          />
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.actionBtn, { backgroundColor: "green" }]}
           onPress={type === "add" ? handleAdd : handleEdit}
         >
-          <Icon name="check" size={30} color={colors.text} />
+          <Icon
+            name="check"
+            size={fontSize}
+            color={isDarkMode ? "black" : "white"}
+          />
         </TouchableOpacity>
       </ThemeView>
     </ThemeView>
@@ -102,9 +110,9 @@ const styles = StyleSheet.create({
   actionBtn: {
     margin: 12,
     backgroundColor: "red",
-    width: 40,
-    height: 40,
     borderRadius: 100,
+    minHeight: 50,
+    minWidth: 50,
     alignItems: "center",
     justifyContent: "center",
   },

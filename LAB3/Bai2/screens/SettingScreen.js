@@ -6,7 +6,7 @@ import ThemeView from "../component/ThemeView";
 import ThemeText from "../component/ThemeText";
 
 const SettingsScreen = () => {
-  const { isDarkMode, fontSize, toggleDarkMode, changeFontSize, colors } =
+  const { isDarkMode, fontSize, toggleDarkMode, changeFontSize } =
     useContext(ThemeContext);
 
   return (
@@ -21,9 +21,9 @@ const SettingsScreen = () => {
         <ThemeText>{fontSize}px</ThemeText>
       </ThemeView>
       <Slider
-        style={{ width: 200, height: 40 }}
+        style={{ width: "80%", height: 40 }}
         minimumValue={12}
-        maximumValue={32}
+        maximumValue={36}
         step={2}
         value={fontSize}
         onValueChange={changeFontSize}

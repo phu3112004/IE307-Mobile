@@ -17,14 +17,12 @@ export const SettingsContextProvider = ({ children }) => {
     settings();
   }, []);
 
-  // Lưu chế độ sáng/tối
   const toggleDarkMode = async () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
     await AsyncStorage.setItem("darkMode", JSON.stringify(newMode));
   };
 
-  // Lưu kích thước font chữ
   const changeFontSize = async (size) => {
     setFontSize(size);
     await AsyncStorage.setItem("fontSize", JSON.stringify(size));

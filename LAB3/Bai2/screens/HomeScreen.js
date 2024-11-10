@@ -9,7 +9,7 @@ import { getNotes, deleteNote } from "../db/database";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 export default function HomeScreen({ navigation }) {
-  const { isDarkMode, colors } = useContext(ThemeContext);
+  const { isDarkMode, colors, fontSize } = useContext(ThemeContext);
   const [notes, setNotes] = useState([]);
 
   useFocusEffect(
@@ -39,9 +39,11 @@ export default function HomeScreen({ navigation }) {
           ]}
           onPress={() => navigation.navigate("AddNote")}
         >
-          <Text style={{ fontSize: 30, color: isDarkMode ? "black" : "white" }}>
-            +
-          </Text>
+          <Icon
+            name="plus"
+            size={fontSize}
+            color={isDarkMode ? "black" : "white"}
+          />
         </TouchableOpacity>
       </ThemeView>
 
@@ -66,7 +68,7 @@ export default function HomeScreen({ navigation }) {
             </ThemeView>
             <ThemeView style={styles.delete}>
               <TouchableOpacity onPress={() => handleDeleteNote(item.id)}>
-                <Icon name="trash" size={30} color={colors.text} />
+                <Icon name="trash" size={fontSize + 8} color={colors.text} />
               </TouchableOpacity>
             </ThemeView>
           </TouchableOpacity>
@@ -95,9 +97,10 @@ const styles = StyleSheet.create({
   addButton: {
     backgroundColor: "#fe5300",
     borderRadius: 100,
-    width: 50,
-    height: 50,
+    minHeight: 50,
+    minWidth: 50,
     alignItems: "center",
+    justifyContent: "center",
   },
   notesContainer: {
     marginVertical: 16,
