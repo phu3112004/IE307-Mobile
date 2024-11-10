@@ -32,7 +32,7 @@ export const SettingsContextProvider = ({ children }) => {
   const theme = {
     colors: {
       background: isDarkMode ? "#222" : "#eee",
-      text: isDarkMode ? "#fff" : "#000",
+      text: isDarkMode ? "#fff" : "#333",
     },
     fontSize,
     isDarkMode,

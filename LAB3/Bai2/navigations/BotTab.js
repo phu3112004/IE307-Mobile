@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../screens/HomeScreen";
 import SettingScreen from "../screens/SettingScreen";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { ThemeContext } from "../context/SettingsContext";
+import HomeStack from "./HomeStack";
 const Tab = createBottomTabNavigator();
 
 export default function Application() {
@@ -13,7 +13,7 @@ export default function Application() {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-          if (route.name === "Home") {
+          if (route.name === "HomeStack") {
             iconName = "home";
           } else if (route.name === "Settings") {
             iconName = "gear";
@@ -27,11 +27,11 @@ export default function Application() {
           backgroundColor: isDarkMode ? "black" : "white",
         },
       })}
-      initialRouteName="Home"
+      initialRouteName="HomeStack"
     >
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="HomeStack"
+        component={HomeStack}
         options={{ headerShown: false }}
       />
       <Tab.Screen

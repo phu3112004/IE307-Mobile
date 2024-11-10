@@ -1,10 +1,8 @@
-import { View, Text } from "react-native";
 import React from "react";
+import NoteInput from "../component/NoteInput";
 
-export default function AddNoteScreen() {
-  return (
-    <View>
-      <Text>AddNoteScreen</Text>
-    </View>
-  );
-}
+const AddNote = ({ navigation }) => {
+  return <NoteInput navigation={navigation} type="add" />;
+};
+
+export default AddNote;
