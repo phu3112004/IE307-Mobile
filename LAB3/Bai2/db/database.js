@@ -1,49 +1,50 @@
-import * as SQLite from "expo-sqlite/legacy";
+import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase("notes.db");
+// Mở cơ sở dữ liệu đồng bộ
+const db = SQLite.openDatabaseSync("notes.db");
 
-export const createTable = () => {
-  db.transaction((tx) => {
-    tx.executeSql(
-      `CREATE TABLE IF NOT EXISTS notes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
-        content TEXT
-      );`
-    );
-  });
+// Tạo bảng nếu chưa tồn tại
+export const createTable = async () => {
+  await db.execAsync(
+    `CREATE TABLE IF NOT EXISTS notes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT,
+      content TEXT
+    );`
+  );
 };
 
-export const getNotes = (callback) => {
-  db.transaction((tx) => {
-    tx.executeSql("SELECT * FROM notes", [], (_, { rows: { _array } }) =>
-      callback(_array)
-    );
-  });
+// Lấy tất cả các ghi chú
+export const getNotes = async (callback) => {
+  try {
+    const result = await db.getAllAsync("SELECT * FROM notes");
+    callback(result);
+  } catch (error) {
+    console.error("Error getting notes:", error);
+  }
 };
 
-export const addNote = (title, content, callback) => {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "INSERT INTO notes (title, content) VALUES (?, ?)",
-      [title, content],
-      () => callback()
-    );
-  });
+// Thêm ghi chú mới
+export const addNote = async (title, content, callback) => {
+  await db.runAsync("INSERT INTO notes (title, content) VALUES (?, ?)", [
+    title,
+    content,
+  ]);
+  callback();
 };
 
-export const updateNote = (id, title, content, callback) => {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "UPDATE notes SET title = ?, content = ? WHERE id = ?",
-      [title, content, id],
-      () => callback()
-    );
-  });
+// Cập nhật ghi chú
+export const updateNote = async (id, title, content, callback) => {
+  await db.runAsync("UPDATE notes SET title = ?, content = ? WHERE id = ?", [
+    title,
+    content,
+    id,
+  ]);
+  callback();
 };
 
-export const deleteNote = (id, callback) => {
-  db.transaction((tx) => {
-    tx.executeSql("DELETE FROM notes WHERE id = ?", [id], () => callback());
-  });
+// Xóa ghi chú
+export const deleteNote = async (id, callback) => {
+  await db.runAsync("DELETE FROM notes WHERE id = ?", [id]);
+  callback();
 };
