@@ -12,11 +12,11 @@ export default function CategoryScreen() {
       initialRouteName="Categories1"
       screenOptions={{
         tabBarLabelStyle: {
-          fontSize: 14, // Đảm bảo kích thước của nhãn đủ lớn
-          fontWeight: "bold", // Đảm bảo có độ đậm cho nhãn
+          fontSize: 14,
+          fontWeight: "bold",
         },
         tabBarIndicatorStyle: {
-          backgroundColor: "blue", // Tùy chỉnh chỉ báo nếu cần
+          backgroundColor: "blue",
         },
       }}
     >
