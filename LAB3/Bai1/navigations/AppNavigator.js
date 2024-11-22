@@ -1,6 +1,4 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { AuthContext } from "../context/AuthContext";
-import { useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import MainTab from "./MainTab";
@@ -11,7 +9,6 @@ import HomeDrawerNavigator from "./HomeDrawerNavigator";
 
 const Stack = createStackNavigator();
 const AppNavigator = () => {
-  const { userToken } = useContext(AuthContext);
   return (
     <SafeAreaProvider>
       <NavigationContainer>
