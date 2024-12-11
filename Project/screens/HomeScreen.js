@@ -8,19 +8,17 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import Carousel from "react-native-reanimated-carousel";
-import { getAllProducts } from "../helps/helps";
+import { getAllBooks } from "../helps/helps";
 import { ScrollView } from "react-native-gesture-handler";
 
 export default function HomeScreen() {
-  const [newProducts, setNewProducts] = useState([]);
-  const [hotProducts, setHotProducts] = useState([]);
+  const [books, setBooks] = useState([]);
   const width = Dimensions.get("window").width;
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const products = await getAllProducts();
-      setNewProducts(products.filter((product) => product.rating.rate <= 4));
-      setHotProducts(products.filter((product) => product.rating.rate > 4));
+      const products = await getAllBooks();
+      setBooks(products);
     };
 
     fetchProducts();
@@ -55,9 +53,9 @@ export default function HomeScreen() {
         )}
       />
       <View style={styles.itemContainer}>
-        <Text style={styles.subHeader}>Hot Deals</Text>
+        <Text style={styles.subHeader}>Hot Books</Text>
         <FlatList
-          data={hotProducts}
+          data={books}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={styles.flatListContent}
           numColumns={2}
@@ -69,28 +67,9 @@ export default function HomeScreen() {
                 style={styles.productItemImage}
               />
               <Text>{item.title}</Text>
-              <Text>{item.rating.rate}</Text>
-              <Text>${item.price}</Text>
-            </View>
-          )}
-        />
-
-        <Text style={styles.subHeader}>New Arrivals</Text>
-        <FlatList
-          data={newProducts}
-          keyExtractor={(item) => item.id.toString()}
-          nestedScrollEnabled={true}
-          contentContainerStyle={styles.flatListContent}
-          numColumns={2}
-          renderItem={({ item }) => (
-            <View style={styles.productItem}>
-              <Image
-                source={{ uri: item.image }}
-                style={styles.productItemImage}
-              />
-              <Text>{item.title}</Text>
-              <Text>{item.rating.rate}</Text>
-              <Text>${item.price}</Text>
+              <Text>{item.author}</Text>
+              <Text>{item.releaseDate}</Text>
+              <Text>{item.language}</Text>
             </View>
           )}
         />
