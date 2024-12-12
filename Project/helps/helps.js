@@ -24,7 +24,6 @@ export const getAllBooks = async () => {
         language: languageMatch ? languageMatch[1] : "Unknown",
         image: `https://www.gutenberg.org/cache/epub/${i}/pg${i}.cover.medium.jpg`,
       };
-      console.log(book);
       data.push(book);
     } catch (error) {
       console.error(error);
