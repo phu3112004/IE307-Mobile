@@ -1,5 +1,4 @@
-import Library from "./Project/Library";
-import Main from "./LAB4/Bai1/Main";
+import Main from "./Project/Main";
 export default function App() {
-  return <Library />;
+  return <Main />;
 }

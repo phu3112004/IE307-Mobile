@@ -14,7 +14,7 @@ export const getAllBooks = async () => {
       const text = await response.text();
       const titleMatch = text.match(/Title:\s*(.+)/);
       const authorMatch = text.match(/Author:\s*(.+)/);
-      const releaseDateMatch = text.match(/Release date:\s*(.+)/i);
+      const releaseDateMatch = text.match(/Most recently updated:\s*(.+)/i);
       const languageMatch = text.match(/Language:\s*(.+)/);
       const book = {
         id: i,

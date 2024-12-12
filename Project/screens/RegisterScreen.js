@@ -10,19 +10,24 @@ import {
   StyleSheet,
 } from "react-native";
 
-const LoginScreen = ({ navigation }) => {
-  const { logIn, userToken } = useContext(AuthContext);
+const RegisterScreen = ({ navigation }) => {
+  const { signUp, userToken } = useContext(AuthContext);
+  const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
-    if (userToken && userToken.username) {
+    if (userToken) {
       navigation.navigate("MainTab");
     }
   }, [userToken]);
 
-  const handleLogin = () => {
-    logIn(username, password);
+  const handleSignUp = () => {
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    } else signUp(name, username, password, navigation);
   };
   return (
     <View style={styles.container}>
@@ -32,7 +37,19 @@ const LoginScreen = ({ navigation }) => {
         }}
         style={styles.logo}
       />
-      <Text style={styles.welcomeText}> Log in</Text>
+      <Text style={styles.welcomeText}>Register</Text>
+
+      <View style={styles.inputContainer}>
+        <View style={styles.iconStyleContainer}>
+          <Icon name="user" size={24} color="#000" style={styles.iconStyle} />
+        </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Name"
+          value={name}
+          onChangeText={(text) => setName(text)}
+        />
+      </View>
 
       <View style={styles.inputContainer}>
         <View style={styles.iconStyleContainer}>
@@ -64,15 +81,28 @@ const LoginScreen = ({ navigation }) => {
         />
       </View>
 
+      <View style={styles.inputContainer}>
+        <View style={styles.iconStyleContainer}>
+          <Icon name="lock" size={27} color="#000" style={styles.iconStyle} />
+        </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Confirm Password"
+          secureTextEntry
+          value={confirmPassword}
+          onChangeText={(text) => setConfirmPassword(text)}
+        />
+      </View>
+
       <TouchableOpacity
-        style={styles.actionContainer}
-        onPress={() => navigation.navigate("Register")}
+        style={styles.forgotPasswordContainer}
+        onPress={() => navigation.navigate("Login")}
       >
-        <Text style={styles.action}>Sign up?</Text>
+        <Text style={styles.forgotPassword}>Have an account?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginButtonText}>LOG IN</Text>
+      <TouchableOpacity style={styles.loginButton} onPress={handleSignUp}>
+        <Text style={styles.loginButtonText}>SIGN UP</Text>
       </TouchableOpacity>
     </View>
   );
@@ -117,11 +147,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000",
   },
-  actionContainer: {
+  forgotPasswordContainer: {
     alignItems: "flex-end",
     width: "100%",
   },
-  action: {
+  forgotPassword: {
     marginVertical: 10,
     color: "hotpink",
   },
@@ -139,4 +169,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default RegisterScreen;

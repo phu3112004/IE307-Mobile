@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 
-export default function CartScreen() {
+export default function LibraryScreen() {
   return (
     <View style={styles.container}>
-      <Text>CartScreen</Text>
+      <Text>LibraryScreen</Text>
     </View>
   );
 }

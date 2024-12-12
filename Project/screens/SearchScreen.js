@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 
-export default function CategoryScreen() {
+export default function SearchScreen() {
   return (
     <View style={styles.container}>
-      <Text>CategoryScreen</Text>
+      <Text>SearchScreen</Text>
     </View>
   );
 }

@@ -1,11 +1,11 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
-import CategoryScreen from "../screens/CategoryScreen";
-import CartScreen from "../screens/CartScreen";
+import LibraryScreen from "../screens/LibraryScreen";
+import SearchScreen from "../screens/SearchScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import Icon from "react-native-vector-icons/FontAwesome";
-import CartIconWithBadge from "../badge/CartIconWithBadge";
+import LibraryIconWithBadge from "../badge/LibraryIconWithBadge";
 
 const Tab = createBottomTabNavigator();
 export default function MainTab() {
@@ -17,11 +17,11 @@ export default function MainTab() {
 
           if (route.name === "Home") {
             iconName = "home";
-          } else if (route.name === "Categories") {
-            iconName = "list";
-          } else if (route.name === "Cart") {
+          } else if (route.name === "Search") {
+            iconName = "search";
+          } else if (route.name === "Library") {
             return (
-              <CartIconWithBadge badgeCount={3} color={color} size={size} />
+              <LibraryIconWithBadge badgeCount={3} color={color} size={size} />
             );
           } else if (route.name === "Profile") {
             iconName = "user";
@@ -39,13 +39,13 @@ export default function MainTab() {
         options={{ headerShown: true }}
       />
       <Tab.Screen
-        name="Categories"
-        component={CategoryScreen}
+        name="Search"
+        component={SearchScreen}
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="Cart"
-        component={CartScreen}
+        name="Library"
+        component={LibraryScreen}
         options={{ headerShown: false }}
       />
       <Tab.Screen

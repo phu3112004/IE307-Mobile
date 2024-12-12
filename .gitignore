@@ -4,6 +4,7 @@
 node_modules/
 .vscode
 .idea
+Project/config
 # Expo
 .expo/
 dist/

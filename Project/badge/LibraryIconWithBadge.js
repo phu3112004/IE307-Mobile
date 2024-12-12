@@ -2,10 +2,10 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-function CartIconWithBadge({ badgeCount, color, size }) {
+function LibraryIconWithBadge({ badgeCount, color, size }) {
   return (
     <View style={{ width: size, height: size }}>
-      <Icon name="shopping-cart" size={size} color={color} />
+      <Icon name="book" size={size} color={color} />
       {badgeCount > 0 && (
         <View style={styles.badge}>
           <Text style={styles.badgeText}>{badgeCount}</Text>
@@ -34,4 +34,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CartIconWithBadge;
+export default LibraryIconWithBadge;
