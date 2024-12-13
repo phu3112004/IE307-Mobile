@@ -3,7 +3,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AuthStack from "./navigations/AuthStack";
-import MainTab from "./navigations/MainTab";
+import BookStack from "./navigations/BookStack";
 
 const Stack = createStackNavigator();
 
@@ -18,8 +18,8 @@ export default function Library() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="MainTab"
-            component={MainTab}
+            name="BookStack"
+            component={BookStack}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

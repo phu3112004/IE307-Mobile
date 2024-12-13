@@ -4,21 +4,26 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  FlatList,
+  ScrollView,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import Carousel from "react-native-reanimated-carousel";
 import { getAllBooks } from "../helps/helps";
-import { ScrollView } from "react-native-gesture-handler";
+import BookList from "./../component/BookList";
 
 export default function HomeScreen() {
   const [books, setBooks] = useState([]);
+  const [hotBooks, setHotBooks] = useState([]);
   const width = Dimensions.get("window").width;
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const products = await getAllBooks();
-      setBooks(products);
+      const allBooks = await getAllBooks();
+      setBooks(allBooks);
+
+      // Chọn 8 cuốn sách đầu tiên làm sách hot
+      const randomBooks = allBooks.slice(0, 4);
+      setHotBooks(randomBooks);
     };
 
     fetchProducts();
@@ -26,19 +31,18 @@ export default function HomeScreen() {
 
   const bannerData = [
     {
-      uri: "https://intphcm.com/data/upload/banner-thoi-trang.jpg",
+      uri: "https://www.thebookseller.com/AcuCustom/Sitename/DAM/434/Books_1920_X_1080_copy.jpg",
     },
     {
-      uri: "https://cdn.shopify.com/s/files/1/1115/6326/files/B1004_Diamonds_banner_3_thumb_e01734f7-45ee-4a5d-a2c6-cd722e1f0a23.jpg?v=1511876038",
+      uri: "https://www.eluniversity.co.za/wp-content/uploads/2021/11/GettyImages-577674005-1004x565.jpg",
     },
     {
-      uri: "https://img.freepik.com/free-vector/flat-design-electronics-store-facebook-cover_23-2151098080.jpg",
+      uri: "https://www.publishcentral.com.au/wp-content/uploads/2023/05/book-pile-of-must-read-books-scaled1.jpeg",
     },
   ];
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.header}>Shopping is cheaper than psychiatrist</Text>
       <Carousel
         loop
         width={width}
@@ -54,24 +58,16 @@ export default function HomeScreen() {
       />
       <View style={styles.itemContainer}>
         <Text style={styles.subHeader}>Hot Books</Text>
-        <FlatList
-          data={books}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.flatListContent}
-          numColumns={2}
-          nestedScrollEnabled={true}
-          renderItem={({ item }) => (
-            <View style={styles.productItem}>
-              <Image
-                source={{ uri: item.image }}
-                style={styles.productItemImage}
-              />
-              <Text>{item.title}</Text>
-              <Text>{item.author}</Text>
-              <Text>{item.releaseDate}</Text>
-              <Text>{item.language}</Text>
-            </View>
-          )}
+        <BookList
+          books={hotBooks} // Truyền danh sách sách hot
+          onBookPress={(book) => console.log("Selected Book:", book)}
+        />
+      </View>
+      <View style={styles.itemContainer}>
+        <Text style={styles.subHeader}>Our Books</Text>
+        <BookList
+          books={books} // Truyền toàn bộ danh sách sách
+          onBookPress={(book) => console.log("Selected Book:", book)}
         />
       </View>
     </ScrollView>
@@ -104,24 +100,9 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
-    borderRadius: 10,
   },
   itemContainer: {
     marginTop: 20,
     paddingHorizontal: 10,
-  },
-  flatListContent: {
-    marginLeft: -5,
-  },
-  productItem: {
-    width: Dimensions.get("window").width / 2 - 15,
-    margin: 5,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-  },
-  productItemImage: {
-    width: "100%",
-    height: 200,
   },
 });

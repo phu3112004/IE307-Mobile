@@ -142,8 +142,7 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   forgotPasswordContainer: {
-    alignItems: "flex-end",
-    width: "100%",
+    alignSelf: "flex-end",
   },
   forgotPassword: {
     marginVertical: 10,
