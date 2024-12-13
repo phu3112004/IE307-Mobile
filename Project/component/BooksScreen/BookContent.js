@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { getAllBooks } from "../../helps/helps"; // Đảm bảo bạn import hàm getAllBooks đúng cách
 
 export default function BookContent({ route }) {
@@ -19,7 +26,12 @@ export default function BookContent({ route }) {
   }, [id]);
 
   if (!bookDetails) {
-    return <Text>Loading...</Text>; // Nếu chưa có dữ liệu
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />{" "}
+        {/* Hiệu ứng xoay vòng */}
+      </View>
+    );
   }
 
   return (
@@ -27,10 +39,7 @@ export default function BookContent({ route }) {
       {/* Nền tùy chỉnh */}
       <View style={styles.backgroundContainer}>
         {/* Ảnh sách */}
-        <Image
-          source={{ uri: bookDetails.image }}
-          style={styles.image}
-        />
+        <Image source={{ uri: bookDetails.image }} style={styles.image} />
       </View>
 
       {/* Tiêu đề sách */}
@@ -49,22 +58,28 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#fff",
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center", // Căn giữa theo chiều dọc
+    alignItems: "center", // Căn giữa theo chiều ngang
+    backgroundColor: "#fff",
+  },
   backgroundContainer: {
     width: "100%",
-    height: 250,         // Chiều cao của background
+    height: 250, // Chiều cao của background
     backgroundColor: "#f0f0f0", // Màu nền tùy chỉnh
-    borderRadius: 10,     // Làm tròn các góc nếu muốn
+    borderRadius: 10, // Làm tròn các góc nếu muốn
     position: "relative", // Đảm bảo có thể đặt vị trí cho ảnh
-    overflow: "hidden",   // Giới hạn phần dư ra ngoài
-    marginBottom: 20,     // Khoảng cách giữa background và nội dung bên dưới
+    overflow: "hidden", // Giới hạn phần dư ra ngoài
+    marginBottom: 20, // Khoảng cách giữa background và nội dung bên dưới
   },
   image: {
-    width: "150%",        // Đặt chiều rộng ảnh lớn hơn để 50% nằm ngoài nền
-    height: "100%",       // Đặt chiều cao ảnh cho vừa với chiều cao của background
+    width: "150%", // Đặt chiều rộng ảnh lớn hơn để 50% nằm ngoài nền
+    height: "100%", // Đặt chiều cao ảnh cho vừa với chiều cao của background
     position: "absolute", // Đặt ảnh ở vị trí tuyệt đối trong container
-    left: "-25%",         // Dịch chuyển ảnh sang trái 25% để 50% nằm ngoài
+    left: "-25%", // Dịch chuyển ảnh sang trái 25% để 50% nằm ngoài
     resizeMode: "contain", // Đảm bảo ảnh không bị cắt xén
-    top: 0,               // Đảm bảo ảnh bắt đầu từ vị trí trên cùng
+    top: 0, // Đảm bảo ảnh bắt đầu từ vị trí trên cùng
   },
   title: {
     fontSize: 24,

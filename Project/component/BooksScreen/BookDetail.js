@@ -1,5 +1,12 @@
 import React, { useContext } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image, ToastAndroid } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ToastAndroid,
+} from "react-native";
 import axios from "axios";
 import ip from "../../config/ip";
 import { AuthContext } from "../../context/AuthContext"; // Import AuthContext
@@ -15,13 +22,16 @@ export default function BookDetail({ route, navigation }) {
     try {
       // Nếu sách đã tồn tại, không thực hiện thêm
       if (isBookAdded) {
-        ToastAndroid.show("This book is already in your library!", ToastAndroid.SHORT);
+        ToastAndroid.show(
+          "This book is already in your library!",
+          ToastAndroid.SHORT
+        );
         return;
       }
 
       // Cập nhật danh sách sách của người dùng, thêm sách vào đầu mảng
       const updatedBooks = [id, ...userToken.books];
-      
+
       // Gửi yêu cầu cập nhật dữ liệu lên server
       await axios.patch(`http://${ip}:3000/users/${userToken.id}`, {
         books: updatedBooks,
@@ -32,10 +42,12 @@ export default function BookDetail({ route, navigation }) {
 
       // Hiển thị thông báo thành công bằng ToastAndroid
       ToastAndroid.show("Book added to your library!", ToastAndroid.SHORT);
-
     } catch (error) {
       console.error("Error adding book to library:", error);
-      ToastAndroid.show("Something went wrong, please try again.", ToastAndroid.LONG);
+      ToastAndroid.show(
+        "Something went wrong, please try again.",
+        ToastAndroid.LONG
+      );
     }
   };
 

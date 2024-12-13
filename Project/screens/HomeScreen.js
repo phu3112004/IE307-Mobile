@@ -18,11 +18,9 @@ export default function HomeScreen() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const allBooks = await getAllBooks();
+      const allBooks = await getAllBooks(10, 20);
       setBooks(allBooks);
-
-      // Chọn 8 cuốn sách đầu tiên làm sách hot
-      const randomBooks = allBooks.slice(0, 4);
+      const randomBooks = await getAllBooks(10, 14);
       setHotBooks(randomBooks);
     };
 
@@ -59,14 +57,14 @@ export default function HomeScreen() {
       <View style={styles.itemContainer}>
         <Text style={styles.subHeader}>Hot Books</Text>
         <BookList
-          books={hotBooks} // Truyền danh sách sách hot
+          books={hotBooks}
           onBookPress={(book) => console.log("Selected Book:", book)}
         />
       </View>
       <View style={styles.itemContainer}>
         <Text style={styles.subHeader}>Our Books</Text>
         <BookList
-          books={books} // Truyền toàn bộ danh sách sách
+          books={books}
           onBookPress={(book) => console.log("Selected Book:", book)}
         />
       </View>

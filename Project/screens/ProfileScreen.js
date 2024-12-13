@@ -10,11 +10,16 @@ import {
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { ThemeContext } from "../context/ThemeContext";
 import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/FontAwesome";
 import axios from "axios";
 import ip from "../config/ip";
+import ThemeView from "../component/ThemeView";
+import ThemeText from "../component/ThemeText";
 
 export default function ProfileScreen() {
+  const { theme, setTheme } = useContext(ThemeContext);
   const { userToken, logOut, setUserToken } = useContext(AuthContext);
   const navigation = useNavigation();
 
@@ -31,6 +36,9 @@ export default function ProfileScreen() {
     navigation.replace("AuthStack");
   };
 
+  const handleThemeChange = (selectedTheme) => {
+    setTheme(selectedTheme);
+  };
   const handleChangePassword = async () => {
     if (!currentPassword || !newPassword || !confirmNewPassword) {
       alert("Please fill in all fields.");
@@ -77,15 +85,15 @@ export default function ProfileScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.coverImageContainer}>
+    <ThemeView style={styles.container}>
+      <ThemeView style={styles.coverImageContainer}>
         <Image
           source={{
             uri: "https://png.pngtree.com/thumb_back/fh260/background/20230617/pngtree-illuminated-tree-of-knowledge-sprouting-from-pile-of-books-symbolizing-career-image_3602898.jpg",
           }}
           style={styles.coverImage}
         />
-      </View>
+      </ThemeView>
 
       <View style={styles.profileImageContainer}>
         <Image
@@ -96,12 +104,91 @@ export default function ProfileScreen() {
         />
       </View>
 
-      <View style={styles.infoContainer}>
-        <Text style={styles.name}>{userToken.name}</Text>
+      <ThemeView style={styles.infoContainer}>
+        <ThemeText style={styles.name}>{userToken.name}</ThemeText>
         <Text style={styles.username}>@{userToken.username}</Text>
-      </View>
+      </ThemeView>
 
-      <View style={styles.btnContainer}>
+      <ThemeView style={styles.themeSelection}>
+        <ThemeText
+          style={[styles.label, theme === "dark" && { color: "#fff" }]}
+        >
+          Select Theme
+        </ThemeText>
+        <ThemeView style={styles.radioGroup}>
+          <TouchableOpacity
+            style={styles.radioButton}
+            onPress={() => handleThemeChange("light")}
+          >
+            <Icon
+              name="sun-o"
+              size={16}
+              style={{ marginRight: 5 }}
+              color={
+                theme === "light"
+                  ? "#cf3339"
+                  : theme === "dark"
+                  ? "#fff"
+                  : "#000"
+              }
+            />
+            <Text
+              style={[
+                theme === "light"
+                  ? styles.radioSelected
+                  : theme === "dark" && { color: "#fff" },
+                styles.themeBtn,
+              ]}
+            >
+              Light
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.radioButton}
+            onPress={() => handleThemeChange("dark")}
+          >
+            <Icon
+              name="moon-o"
+              size={16}
+              style={{ marginRight: 5 }}
+              color={theme === "dark" ? "#cf3339" : "#000"}
+            />
+            <Text
+              style={[
+                theme === "dark" ? styles.radioSelected : null,
+                styles.themeBtn,
+              ]}
+            >
+              Dark
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.radioButton}
+            onPress={() => handleThemeChange("eye")}
+          >
+            <Icon
+              name="eye"
+              size={16}
+              style={{ marginRight: 5 }}
+              color={
+                theme === "eye" ? "#cf3339" : theme === "dark" ? "#fff" : "#000"
+              }
+            />
+            <Text
+              style={[
+                theme === "eye"
+                  ? styles.radioSelected
+                  : theme === "dark" && { color: "#fff" },
+                styles.themeBtn,
+              ]}
+            >
+              Eye Care
+            </Text>
+          </TouchableOpacity>
+        </ThemeView>
+      </ThemeView>
+
+      <ThemeView style={styles.btnContainer}>
         <TouchableOpacity
           style={[styles.btn, styles.editButton]}
           onPress={() => setModalProfileVisible(true)}
@@ -121,7 +208,7 @@ export default function ProfileScreen() {
         >
           <Text style={styles.btnText}>LOG OUT</Text>
         </TouchableOpacity>
-      </View>
+      </ThemeView>
 
       <Modal
         animationType="slide"
@@ -130,29 +217,36 @@ export default function ProfileScreen() {
         onRequestClose={() => setModalProfileVisible(false)}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Edit Profile</Text>
-            <Text>Name</Text>
+          <ThemeView style={styles.modalContent}>
+            <ThemeText style={styles.modalTitle}>Edit Profile</ThemeText>
+            <ThemeText>Name</ThemeText>
             <TextInput
-              style={styles.input}
+              style={[styles.input, theme === "dark" && { color: "#fff" }]}
               value={editedName}
               onChangeText={setEditedName}
               placeholder="Enter your name"
+              placeholderTextColor={"#888"}
             />
-            <Text>Username</Text>
+            <ThemeText>Username</ThemeText>
             <TextInput
-              style={styles.input}
+              style={[styles.input, theme === "dark" && { color: "#fff" }]}
               value={editedUsername}
               onChangeText={setEditedUsername}
               placeholder="Enter your username"
+              placeholderTextColor={"#888"}
             />
-            <Button title="Save" onPress={handleEditProfile} />
+            <Button
+              title="Save"
+              onPress={handleEditProfile}
+              color={"#4682b4"}
+            />
+            <ThemeView style={{ marginVertical: 5 }} />
             <Button
               title="Cancel"
               onPress={() => setModalProfileVisible(false)}
               color={"#cf3339"}
             />
-          </View>
+          </ThemeView>
         </View>
       </Modal>
       <Modal
@@ -162,42 +256,50 @@ export default function ProfileScreen() {
         onRequestClose={() => setModalPasswordVisible(false)}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Change Password</Text>
-            <Text>Current Password</Text>
+          <ThemeView style={styles.modalContent}>
+            <ThemeText style={styles.modalTitle}>Change Password</ThemeText>
+            <ThemeText>Current Password</ThemeText>
             <TextInput
-              style={styles.input}
+              style={[styles.input, theme === "dark" && { color: "#fff" }]}
               value={currentPassword}
               onChangeText={setCurrentPassword}
               placeholder="Enter your current password"
               secureTextEntry={true}
+              placeholderTextColor={"#888"}
             />
-            <Text>New Password</Text>
+            <ThemeText>New Password</ThemeText>
             <TextInput
-              style={styles.input}
+              style={[styles.input, theme === "dark" && { color: "#fff" }]}
               value={newPassword}
               onChangeText={setNewPassword}
               placeholder="Enter your new password"
               secureTextEntry={true}
+              placeholderTextColor={"#888"}
             />
-            <Text>Confirm New Password</Text>
+            <ThemeText>Confirm New Password</ThemeText>
             <TextInput
-              style={styles.input}
+              style={[styles.input, theme === "dark" && { color: "#fff" }]}
               value={confirmNewPassword}
               onChangeText={setConfirmNewPassword}
               placeholder="Enter your confirm new password"
               secureTextEntry={true}
+              placeholderTextColor={"#888"}
             />
-            <Button title="Change" onPress={handleChangePassword} />
+            <Button
+              title="Change"
+              onPress={handleChangePassword}
+              color={"#4682b4"}
+            />
+            <ThemeView style={{ marginVertical: 5 }} />
             <Button
               title="Cancel"
               onPress={() => setModalPasswordVisible(false)}
               color={"#cf3339"}
             />
-          </View>
+          </ThemeView>
         </View>
       </Modal>
-    </View>
+    </ThemeView>
   );
 }
 
@@ -243,6 +345,33 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "gray",
   },
+  themeSelection: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+
+  label: {
+    fontSize: 20,
+    marginBottom: 10,
+  },
+  radioGroup: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 50,
+  },
+  themeBtn: {
+    fontSize: 18,
+  },
+  radioButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 5,
+  },
+  radioSelected: {
+    fontWeight: "bold",
+    color: "#cf3339",
+  },
   btnContainer: {
     flexDirection: "column",
     paddingHorizontal: 20,
@@ -258,10 +387,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   editButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#4682b4",
   },
   logoutButton: {
-    backgroundColor: "#F44336",
+    backgroundColor: "#cf3339",
   },
   btnText: {
     color: "white",

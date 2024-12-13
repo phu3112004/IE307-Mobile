@@ -5,7 +5,12 @@
       "name": "Phú Trần",
       "username": "phutran",
       "password": "1234",
-      "books": [],
+      "books": [
+        49,
+        11,
+        4,
+        1
+      ],
       "recent": []
     },
     {
@@ -13,18 +18,21 @@
       "name": "Phước Huỳnh",
       "username": "phuochuynh",
       "password": "kimoiii",
-      "books": []
+      "books": [
+        49,
+        43
+      ]
     },
     {
       "id": "8879",
-      "name": "Quan Nguyen",
+      "name": "Quan Nguyen ",
       "username": "teo16",
       "password": "123",
       "books": []
     },
     {
       "id": "e596",
-      "name": "Vu Nguyen",
+      "name": "Vu Nguyen ",
       "username": "nganduyen",
       "password": "123",
       "books": []
@@ -34,66 +42,13 @@
       "name": "Minh Béo ",
       "username": "dhm",
       "password": "123",
-      "books": [2, 2, 1]
-    },
-    {
-      "id": "ed5c",
-      "name": "Minh Brso",
-      "username": "dhminh",
-      "password": "123",
-      "books": []
-    },
-    {
-      "id": "73f8",
-      "name": "Minh Béo",
-      "username": "Dhminh ",
-      "password": "123",
-      "books": []
-    },
-    {
-      "id": "a525",
-      "name": "Vu nguyen",
-      "username": "nguyn",
-      "password": "123",
-      "books": []
-    },
-    {
-      "id": "6b3e",
-      "name": "Vu Nguyen",
-      "username": "nguyen123",
-      "password": "123",
-      "books": []
-    },
-    {
-      "id": "8bbe",
-      "name": "Rô",
-      "username": "robeo111",
-      "password": "111",
-      "books": []
-    },
-    {
-      "id": "22e8",
-      "name": "Phước",
-      "username": "phuoc123",
-      "password": "ppp",
-      "books": [],
-      "recent": []
-    },
-    {
-      "id": "f1b1",
-      "name": "Phioc",
-      "username": "ph",
-      "password": "123",
-      "books": [],
-      "recent": []
-    },
-    {
-      "id": "a838",
-      "name": "Ha",
-      "username": "ha",
-      "password": "123",
-      "books": [],
-      "recent": []
+      "books": [
+        11,
+        16,
+        2,
+        2,
+        1
+      ]
     }
   ]
 }
