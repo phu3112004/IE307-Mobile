@@ -17,7 +17,7 @@ const LoginScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (userToken && userToken.username) {
-      navigation.navigate("MainTab");
+      navigation.navigate("BookStack");
     }
   }, [userToken]);
 
@@ -118,8 +118,7 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   actionContainer: {
-    alignItems: "flex-end",
-    width: "100%",
+    alignSelf: "flex-end",
   },
   action: {
     marginVertical: 10,

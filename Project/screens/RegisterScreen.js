@@ -17,12 +17,6 @@ const RegisterScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  useEffect(() => {
-    if (userToken) {
-      navigation.navigate("MainTab");
-    }
-  }, [userToken]);
-
   const handleSignUp = () => {
     if (password !== confirmPassword) {
       alert("Passwords do not match");
@@ -148,8 +142,7 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   forgotPasswordContainer: {
-    alignItems: "flex-end",
-    width: "100%",
+    alignSelf: "flex-end",
   },
   forgotPassword: {
     marginVertical: 10,

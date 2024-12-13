@@ -1,20 +1,35 @@
 import React, { useState, createContext } from "react";
+import { ToastAndroid } from "react-native";
 import axios from "axios";
 import ip from "../config/ip";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [userToken, setUserToken] = useState({});
+  const [userToken, setUserToken] = useState({
+    id: null,
+    name: null,
+    username: null,
+    books: [],
+  });
+
+  const showToast = (message) => {
+    ToastAndroid.show(message, ToastAndroid.SHORT);
+  };
 
   const authContext = {
     signUp: async (name, username, password, navigation) => {
+      if (!name || !username || !password) {
+        showToast("Fields cannot be empty!");
+        return;
+      }
+
       try {
         const response = await axios.get(
           `http://${ip}:3000/users?username=${username}`
         );
         if (response.data.length > 0) {
-          alert("Username is already taken");
+          showToast("Username is already taken");
           return;
         }
 
@@ -22,38 +37,58 @@ export const AuthProvider = ({ children }) => {
           name,
           username,
           password,
+          books: [],
+          recent: [],
         });
-        alert("Sign up successful");
+        showToast("Sign up successful");
         navigation.navigate("Login");
       } catch (error) {
         console.error("Error during sign up:", error);
-        alert("Something went wrong. Please try again");
+        showToast("Something went wrong. Please try again");
       }
     },
+
     logIn: async (username, password) => {
+      if (!username || !password) {
+        showToast("Fields cannot be empty!");
+        return;
+      }
+
       try {
         const response = await axios.get(
           `http://${ip}:3000/users?username=${username}&password=${password}`
         );
 
         if (response.data.length === 0) {
-          alert("Invalid username or password");
+          showToast("Invalid username or password");
           return;
         }
+
+        const user = response.data[0];
         const token = {
-          username,
-          password,
-          id: response.data[0].id,
-          name: response.data[0].name,
+          id: user.id,
+          name: user.name,
+          username: user.username,
+          books: user.books || [],
         };
         setUserToken(token);
-        alert("Log in successful");
+        showToast("Log in successful");
       } catch (error) {
         console.error("Error during login:", error.message);
-        alert("Username or password is incorrect");
+        showToast("Username or password is incorrect");
       }
     },
-    logOut: () => setUserToken({}),
+
+    logOut: () => {
+      setUserToken({
+        id: null,
+        name: null,
+        username: null,
+        books: [],
+      });
+      showToast("Logged out successfully");
+    },  
+
     userToken,
     setUserToken,
   };
