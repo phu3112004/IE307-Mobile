@@ -146,7 +146,8 @@ export default function ProfileScreen() {
               onChangeText={setEditedUsername}
               placeholder="Enter your username"
             />
-            <Button title="Save" onPress={handleEditProfile} />
+            <Button title="Save" onPress={handleEditProfile} color={"#4682b4"} />
+            <View style={{marginVertical:5}}/>            
             <Button
               title="Cancel"
               onPress={() => setModalProfileVisible(false)}
@@ -188,7 +189,8 @@ export default function ProfileScreen() {
               placeholder="Enter your confirm new password"
               secureTextEntry={true}
             />
-            <Button title="Change" onPress={handleChangePassword} />
+            <Button title="Change" onPress={handleChangePassword} color={"#4682b4"}/>
+            <View style={{marginVertical:5}}/>            
             <Button
               title="Cancel"
               onPress={() => setModalPasswordVisible(false)}
@@ -258,10 +260,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   editButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#4682b4",
   },
   logoutButton: {
-    backgroundColor: "#F44336",
+    backgroundColor: "#cf3339",
   },
   btnText: {
     color: "white",

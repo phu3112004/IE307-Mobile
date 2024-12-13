@@ -5,8 +5,11 @@ import {
   Image,
   Dimensions,
   ScrollView,
+  BackHandler,
+  ToastAndroid,
 } from "react-native";
 import React, { useState, useEffect } from "react";
+import { useNavigation, useIsFocused } from "@react-navigation/native"; // Import các hook
 import Carousel from "react-native-reanimated-carousel";
 import { getAllBooks } from "../helps/helps";
 import BookList from "./../component/BookList";
@@ -15,6 +18,35 @@ export default function HomeScreen() {
   const [books, setBooks] = useState([]);
   const [hotBooks, setHotBooks] = useState([]);
   const width = Dimensions.get("window").width;
+  const [backPressedOnce, setBackPressedOnce] = useState(false);
+  const navigation = useNavigation(); // Khởi tạo navigation
+  const isFocused = useIsFocused(); // Kiểm tra xem trang hiện tại có phải là HomeScreen không
+
+  useEffect(() => {
+    const backAction = () => {
+      // Chỉ thực hiện thoát ứng dụng nếu đang ở trang HomeScreen
+      if (isFocused) {
+        if (backPressedOnce) {
+          BackHandler.exitApp(); // Thoát ứng dụng nếu nhấn lần thứ hai
+        } else {
+          setBackPressedOnce(true); // Đánh dấu nhấn lần đầu
+          ToastAndroid.show("Press back again to exit", ToastAndroid.SHORT); // Hiển thị thông báo
+          setTimeout(() => setBackPressedOnce(false), 2000); // Reset trạng thái sau 2 giây
+        }
+      } else {
+        navigation.goBack(); // Quay lại trang trước nếu không phải trang Home
+      }
+
+      return true; // Ngăn hành vi quay lại mặc định
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove(); // Gỡ listener khi component bị unmount
+  }, [backPressedOnce, isFocused, navigation]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -22,7 +54,7 @@ export default function HomeScreen() {
       setBooks(allBooks);
 
       // Chọn 8 cuốn sách đầu tiên làm sách hot
-      const randomBooks = allBooks.slice(0, 4);
+      const randomBooks = allBooks.slice(9, 13);
       setHotBooks(randomBooks);
     };
 

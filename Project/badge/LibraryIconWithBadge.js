@@ -5,7 +5,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 function LibraryIconWithBadge({ badgeCount, color, size }) {
   return (
     <View style={{ width: size, height: size }}>
-      <Icon name="book" size={size} color={color} />
+      <Icon name="bookmark" size={size} color={color} />
       {badgeCount > 0 && (
         <View style={styles.badge}>
           <Text style={styles.badgeText}>{badgeCount}</Text>
@@ -18,8 +18,8 @@ function LibraryIconWithBadge({ badgeCount, color, size }) {
 const styles = StyleSheet.create({
   badge: {
     position: "absolute",
-    right: -6,
-    top: -3,
+    right: -1,
+    top: -2,
     backgroundColor: "red",
     borderRadius: 6,
     width: 12,

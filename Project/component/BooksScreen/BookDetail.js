@@ -8,33 +8,53 @@ export default function BookDetail({ route, navigation }) {
   const { id, title, author, releaseDate, language, image } = route.params;
   const { userToken, setUserToken } = useContext(AuthContext); // Lấy thông tin người dùng từ context
 
-  // Kiểm tra xem sách đã tồn tại trong thư viện hay chưa
   const isBookAdded = userToken.books.includes(id);
 
   const handleSaveBook = async () => {
     try {
-      // Nếu sách đã tồn tại, không thực hiện thêm
       if (isBookAdded) {
-        ToastAndroid.show("This book is already in your library!", ToastAndroid.SHORT);
-        return;
+        // Nếu sách đã có trong thư viện, xóa sách khỏi thư viện
+        const updatedBooks = userToken.books.filter((bookId) => bookId !== id);
+        await axios.patch(`http://${ip}:3000/users/${userToken.id}`, {
+          books: updatedBooks,
+        });
+        setUserToken({ ...userToken, books: updatedBooks });
+        ToastAndroid.show("Book removed from your library!", ToastAndroid.SHORT);
+      } else {
+        // Nếu sách chưa có trong thư viện, thêm sách vào thư viện
+        const updatedBooks = [id, ...userToken.books];
+        await axios.patch(`http://${ip}:3000/users/${userToken.id}`, {
+          books: updatedBooks,
+        });
+        setUserToken({ ...userToken, books: updatedBooks });
+        ToastAndroid.show("Book added to your library!", ToastAndroid.SHORT);
       }
-
-      // Cập nhật danh sách sách của người dùng, thêm sách vào đầu mảng
-      const updatedBooks = [id, ...userToken.books];
-      
-      // Gửi yêu cầu cập nhật dữ liệu lên server
-      await axios.patch(`http://${ip}:3000/users/${userToken.id}`, {
-        books: updatedBooks,
-      });
-
-      // Cập nhật lại state userToken trong ứng dụng
-      setUserToken({ ...userToken, books: updatedBooks });
-
-      // Hiển thị thông báo thành công bằng ToastAndroid
-      ToastAndroid.show("Book added to your library!", ToastAndroid.SHORT);
-
     } catch (error) {
-      console.error("Error adding book to library:", error);
+      console.error("Error updating library:", error);
+      ToastAndroid.show("Something went wrong, please try again.", ToastAndroid.LONG);
+    }
+  };
+
+  const handleReadBook = async () => {
+    try {
+      // Kiểm tra và khởi tạo mảng recent nếu nó chưa có
+      const currentRecent = userToken.recent || []; // Nếu recent chưa có, khởi tạo mảng rỗng
+  
+      // Nếu sách đã có trong recent, xóa khỏi mảng và thêm vào đầu
+      const updatedRecent = currentRecent.filter((bookId) => bookId !== id);
+      updatedRecent.unshift(id); // Thêm vào đầu mảng recent
+  
+      // Cập nhật lại cơ sở dữ liệu
+      await axios.patch(`http://${ip}:3000/users/${userToken.id}`, {
+        recent: updatedRecent,
+      });
+      setUserToken({ ...userToken, recent: updatedRecent }); // Cập nhật lại userToken
+  
+      // Chuyển đến trang nội dung sách
+      navigation.navigate("BookContent", { id });
+  
+    } catch (error) {
+      console.error("Error updating recent books:", error);
       ToastAndroid.show("Something went wrong, please try again.", ToastAndroid.LONG);
     }
   };
@@ -49,21 +69,18 @@ export default function BookDetail({ route, navigation }) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("BookContent", { id })}
+        onPress={handleReadBook} // Gọi handleReadBook khi nhấn nút
       >
         <Text style={styles.buttonText}>Read Content</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[
-          styles.button,
-          isBookAdded && styles.disabledButton, // Áp dụng style cho nút khi đã thêm
-        ]}
-        onPress={handleSaveBook} // Xử lý lưu sách vào thư viện
-        disabled={isBookAdded} // Vô hiệu hóa nút nếu sách đã được thêm
+        style={[styles.button, isBookAdded && styles.disabledButton]} // Áp dụng style cho nút khi đã thêm
+        onPress={handleSaveBook} // Xử lý lưu sách vào thư viện hoặc xóa sách khỏi thư viện
+        disabled={isBookAdded && false} // Không vô hiệu hóa nút, vì có thể xóa sách
       >
         <Text style={styles.buttonText}>
-          {isBookAdded ? "Already in Library" : "Save to Library"}
+          {isBookAdded ? "Remove from Library" : "Save to Library"}
         </Text>
       </TouchableOpacity>
     </View>
@@ -101,7 +118,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   button: {
-    backgroundColor: "red",
+    backgroundColor: "#cf3339",
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -114,6 +131,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   disabledButton: {
-    backgroundColor: "#ccc", // Thay đổi màu sắc nút khi bị vô hiệu hóa
+    backgroundColor: "#ccc", 
   },
 });
