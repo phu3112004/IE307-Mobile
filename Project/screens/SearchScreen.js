@@ -67,7 +67,7 @@ const SearchScreen = () => {
         <>
           {confirmedQuery && (
             <Text style={[styles.resultText, { color: themeColor.color }]}>
-              Results of keyword: {`"${confirmedQuery}"`}
+              Results of {`"${confirmedQuery}"`}: {results.length} books found
             </Text>
           )}
           {results.length > 0 ? (

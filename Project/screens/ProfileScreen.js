@@ -98,7 +98,7 @@ export default function ProfileScreen() {
       <View style={styles.profileImageContainer}>
         <Image
           source={{
-            uri: "https://taoanhdep.com/wp-content/uploads/2023/11/hinhnen-ato.jpg",
+            uri: "https://i.pinimg.com/236x/cd/cb/0c/cdcb0cb30bc700c53f12eff840156b29.jpg",
           }}
           style={styles.profileImage}
         />

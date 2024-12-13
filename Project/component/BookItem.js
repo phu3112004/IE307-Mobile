@@ -13,7 +13,7 @@ const BookItem = ({ item }) => {
       style={[
         styles.itemContainer,
         theme === "dark"
-          ? { backgroundColor: "#333" }
+          ? { backgroundColor: "#222" }
           : theme === "light"
           ? { backgroundColor: "#fff" }
           : { backgroundColor: "#f7f1d5" },

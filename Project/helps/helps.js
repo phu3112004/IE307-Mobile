@@ -49,7 +49,7 @@ export const getAllBooks = async () => {
         data.push(book);
       }
     } catch (error) {
-      console.error(error);
+      // Bỏ qua lỗi và tiếp tục với sách tiếp theo
     }
   }
   return data;
