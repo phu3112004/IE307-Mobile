@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
           name,
           username,
           password,
+          books: [],
         });
         alert("Sign up successful");
         navigation.navigate("Login");
@@ -32,6 +33,9 @@ export const AuthProvider = ({ children }) => {
     },
     logIn: async (username, password) => {
       try {
+        console.log(
+          `http://${ip}:3000/users?username=${username}&password=${password}`
+        );
         const response = await axios.get(
           `http://${ip}:3000/users?username=${username}&password=${password}`
         );
@@ -45,6 +49,7 @@ export const AuthProvider = ({ children }) => {
           password,
           id: response.data[0].id,
           name: response.data[0].name,
+          books: response.data[0].books,
         };
         setUserToken(token);
         alert("Log in successful");

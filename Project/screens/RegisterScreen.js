@@ -11,17 +11,11 @@ import {
 } from "react-native";
 
 const RegisterScreen = ({ navigation }) => {
-  const { signUp, userToken } = useContext(AuthContext);
+  const { signUp } = useContext(AuthContext);
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
-  useEffect(() => {
-    if (userToken) {
-      navigation.navigate("MainTab");
-    }
-  }, [userToken]);
 
   const handleSignUp = () => {
     if (password !== confirmPassword) {

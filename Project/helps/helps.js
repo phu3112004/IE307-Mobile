@@ -4,9 +4,9 @@ export const getAllProducts = async () => {
   return data;
 };
 
-export const getAllBooks = async () => {
+export const getAllBooks = async (start, limit) => {
   const data = [];
-  for (let i = 1; i <= 30; i++) {
+  for (let i = start; i <= limit; i++) {
     try {
       const response = await fetch(
         `https://www.gutenberg.org/cache/epub/${i}/pg${i}.txt`
