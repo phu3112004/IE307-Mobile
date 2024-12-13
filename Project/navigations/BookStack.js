@@ -3,10 +3,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 import BookDetail from "../component/BooksScreen/BookDetail";
 import BookContent from "../component/BooksScreen/BookContent";
 import MainTab from "./MainTab";
+import { useContext } from "react";
+import { ThemeContext } from "../context/ThemeContext";
 
 const BStack = createStackNavigator();
 
 const BookStack = () => {
+  const { themeColor } = useContext(ThemeContext);
   return (
     <BStack.Navigator>
       {/* MainTab không hiển thị header */}
@@ -14,7 +17,7 @@ const BookStack = () => {
         name="MainTab"
         component={MainTab}
         options={{
-          headerShown: false, // Ẩn toàn bộ header, bao gồm nút quay lại
+          headerShown: false, // Ẩn toàn bộ header, bao gồm nút quay lại, tiêu đề
         }}
       />
       {/* BookDetail hiển thị header */}
@@ -22,7 +25,11 @@ const BookStack = () => {
         name="BookDetail"
         component={BookDetail}
         options={{
-          title: "Book Detail", // Tiêu đề của màn hình BookDetail
+          title: "Book Detail",
+          headerStyle: {
+            backgroundColor: themeColor.backgroundColor,
+          },
+          headerTintColor: themeColor.color,
         }}
       />
       {/* BookContent hiển thị header */}
@@ -31,6 +38,10 @@ const BookStack = () => {
         component={BookContent}
         options={{
           title: "Book Content", // Tiêu đề của màn hình BookContent
+          headerStyle: {
+            backgroundColor: themeColor.backgroundColor,
+          },
+          headerTintColor: themeColor.color,
         }}
       />
     </BStack.Navigator>

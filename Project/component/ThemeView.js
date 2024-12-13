@@ -3,21 +3,12 @@ import { View } from "react-native";
 import { ThemeContext } from "../context/ThemeContext";
 
 const ThemeView = ({ children, style }) => {
-  const { theme } = useContext(ThemeContext);
+  const { themeColor } = useContext(ThemeContext);
 
-  const getBackgroundColor = () => {
-    switch (theme) {
-      case "dark":
-        return "#333";
-      case "eye":
-        return "#fef6d3";
-      default:
-        return "#fff";
-    }
-  };
+  const getBackgroundColor = () => {};
 
   return (
-    <View style={[style, { backgroundColor: getBackgroundColor() }]}>
+    <View style={[style, { backgroundColor: themeColor.bgContainer }]}>
       {children}
     </View>
   );

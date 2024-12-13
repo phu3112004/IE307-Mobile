@@ -10,6 +10,8 @@ import {
 import axios from "axios";
 import ip from "../../config/ip";
 import { AuthContext } from "../../context/AuthContext"; // Import AuthContext
+import ThemeView from "../ThemeView";
+import ThemeText from "../ThemeText";
 
 export default function BookDetail({ route, navigation }) {
   const { id, title, author, releaseDate, language, image } = route.params;
@@ -20,28 +22,53 @@ export default function BookDetail({ route, navigation }) {
   const handleSaveBook = async () => {
     try {
       if (isBookAdded) {
+        // Nếu sách đã có trong thư viện, xóa sách khỏi thư viện
+        const updatedBooks = userToken.books.filter((bookId) => bookId !== id);
+        await axios.patch(`http://${ip}:3000/users/${userToken.id}`, {
+          books: updatedBooks,
+        });
+        setUserToken({ ...userToken, books: updatedBooks });
         ToastAndroid.show(
-          "This book is already in your library!",
+          "Book removed from your library!",
           ToastAndroid.SHORT
         );
-        return;
+      } else {
+        // Nếu sách chưa có trong thư viện, thêm sách vào thư viện
+        const updatedBooks = [id, ...userToken.books];
+        await axios.patch(`http://${ip}:3000/users/${userToken.id}`, {
+          books: updatedBooks,
+        });
+        setUserToken({ ...userToken, books: updatedBooks });
+        ToastAndroid.show("Book added to your library!", ToastAndroid.SHORT);
       }
+    } catch (error) {
+      console.error("Error updating library:", error);
+      ToastAndroid.show(
+        "Something went wrong, please try again.",
+        ToastAndroid.LONG
+      );
+    }
+  };
 
-      // Cập nhật danh sách sách của người dùng, thêm sách vào đầu mảng
-      const updatedBooks = [id, ...userToken.books];
+  const handleReadBook = async () => {
+    try {
+      // Kiểm tra và khởi tạo mảng recent nếu nó chưa có
+      const currentRecent = userToken.recent || []; // Nếu recent chưa có, khởi tạo mảng rỗng
 
-      // Gửi yêu cầu cập nhật dữ liệu lên server
+      // Nếu sách đã có trong recent, xóa khỏi mảng và thêm vào đầu
+      const updatedRecent = currentRecent.filter((bookId) => bookId !== id);
+      updatedRecent.unshift(id); // Thêm vào đầu mảng recent
+
+      // Cập nhật lại cơ sở dữ liệu
       await axios.patch(`http://${ip}:3000/users/${userToken.id}`, {
         recent: updatedRecent,
       });
+      setUserToken({ ...userToken, recent: updatedRecent }); // Cập nhật lại userToken
 
-      // Cập nhật lại state userToken trong ứng dụng
-      setUserToken({ ...userToken, books: updatedBooks });
-
-      // Hiển thị thông báo thành công bằng ToastAndroid
-      ToastAndroid.show("Book added to your library!", ToastAndroid.SHORT);
+      // Chuyển đến trang nội dung sách
+      navigation.navigate("BookContent", { id });
     } catch (error) {
-      console.error("Error adding book to library:", error);
+      console.error("Error updating recent books:", error);
       ToastAndroid.show(
         "Something went wrong, please try again.",
         ToastAndroid.LONG
@@ -50,12 +77,12 @@ export default function BookDetail({ route, navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <ThemeView style={styles.container}>
       <Image source={{ uri: image }} style={styles.image} />
-      <Text style={styles.title}>{title}</Text>
+      <ThemeText style={styles.title}>{title}</ThemeText>
       <Text style={styles.author}>{author}</Text>
-      <Text style={styles.text}>Released: {releaseDate}</Text>
-      <Text style={styles.text}>Language: {language}</Text>
+      <ThemeText style={styles.text}>Released: {releaseDate}</ThemeText>
+      <ThemeText style={styles.text}>Language: {language}</ThemeText>
 
       <TouchableOpacity
         style={styles.button}
@@ -73,7 +100,7 @@ export default function BookDetail({ route, navigation }) {
           {isBookAdded ? "Remove from Library" : "Save to Library"}
         </Text>
       </TouchableOpacity>
-    </View>
+    </ThemeView>
   );
 }
 

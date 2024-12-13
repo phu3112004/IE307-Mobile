@@ -19,7 +19,7 @@ import ThemeView from "../component/ThemeView";
 import ThemeText from "../component/ThemeText";
 
 export default function ProfileScreen() {
-  const { theme, setTheme } = useContext(ThemeContext);
+  const { theme, setTheme, themeColor } = useContext(ThemeContext);
   const { userToken, logOut, setUserToken } = useContext(AuthContext);
   const navigation = useNavigation();
 

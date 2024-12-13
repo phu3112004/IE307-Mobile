@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import BookItem from './BookItem';  // Import BookItem Component
+import BookItem from "./BookItem"; // Import BookItem Component
 
 const BookList = ({ books }) => {
   const [visibleBooks, setVisibleBooks] = useState([]); // Sách hiện tại hiển thị
@@ -35,14 +35,22 @@ const BookList = ({ books }) => {
   return (
     <View>
       {loading && books.length === 0 ? (
-        <ActivityIndicator size="large" color="#cf3339" style={styles.loadingIndicator} />
+        <ActivityIndicator
+          size="large"
+          color="#cf3339"
+          style={styles.loadingIndicator}
+        />
       ) : (
         <>
           <FlatList
-            key={numColumns}  // Thêm key prop để đảm bảo FlatList render lại khi số cột thay đổi
+            key={numColumns} // Thêm key prop để đảm bảo FlatList render lại khi số cột thay đổi
             data={visibleBooks}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => <BookItem item={item} />} // Sử dụng BookItem component
+            renderItem={({ item }) => (
+              <View style={styles.itemContainer}>
+                <BookItem item={item} />
+              </View>
+            )} // Sử dụng BookItem component
             contentContainerStyle={styles.listContainer}
             numColumns={numColumns} // Hiển thị 2 item trên 1 hàng
             columnWrapperStyle={styles.columnWrapper} // Điều chỉnh khoảng cách giữa các item trên cùng hàng
@@ -66,7 +74,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   columnWrapper: {
-    justifyContent: 'space-between', // Đảm bảo khoảng cách giữa các item
+    justifyContent: "space-between", // Đảm bảo khoảng cách giữa các item
+  },
+  itemContainer: {
+    flex: 1,
+    maxWidth: "50%", // Đảm bảo mỗi item chỉ chiếm 50% width
+    padding: 5, // Thêm padding để tạo khoảng cách giữa các item
   },
   loadingIndicator: {
     marginVertical: 20,

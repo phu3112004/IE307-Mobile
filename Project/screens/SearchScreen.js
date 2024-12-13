@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   View,
+  ScrollView,
   Text,
   TextInput,
   StyleSheet,
@@ -9,6 +10,8 @@ import {
 } from "react-native";
 import { getAllBooks } from "../helps/helps";
 import BookList from "../component/BookList";
+import { useContext } from "react";
+import { ThemeContext } from "../context/ThemeContext";
 
 const SearchScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,7 +19,7 @@ const SearchScreen = () => {
   const [results, setResults] = useState([]);
   const [books, setBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(false); // Trạng thái loading
-
+  const { themeColor } = useContext(ThemeContext); // Lấy themeColor từ ThemeContext
   useEffect(() => {
     const fetchBooks = async () => {
       const response = await getAllBooks(1, 100);
@@ -39,29 +42,38 @@ const SearchScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: themeColor.bgContainer }]}
+    >
       <TextInput
-        style={styles.input}
         placeholder="Search for books..."
         value={searchQuery}
         onChangeText={(text) => setSearchQuery(text)}
         onSubmitEditing={handleSearch} // Kích hoạt tìm kiếm khi nhấn Enter
+        style={[
+          styles.input,
+          { color: themeColor.color },
+          { backgroundColor: themeColor.bgContainer },
+        ]}
+        placeholderTextColor={"#888"}
       />
       <TouchableOpacity style={styles.button} onPress={handleSearch}>
         <Text style={styles.buttonText}>Search</Text>
       </TouchableOpacity>
 
       {isLoading ? ( // Hiển thị loading khi đang tải
-        <ActivityIndicator size="large" color="#007BFF" />
+        <ActivityIndicator size="large" color="#cf3339" />
       ) : (
         <>
           {confirmedQuery && (
-            <Text style={styles.resultText}>
-              Result of keyword: {`"${confirmedQuery}"`}
+            <Text style={[styles.resultText, { color: themeColor.color }]}>
+              Results of keyword: {`"${confirmedQuery}"`}
             </Text>
           )}
           {results.length > 0 ? (
-            <BookList books={results} />
+            <View style={styles.booksContainer}>
+              <BookList books={results} />
+            </View>
           ) : (
             confirmedQuery && (
               <Text style={styles.noResults}>No results found</Text>
@@ -69,7 +81,7 @@ const SearchScreen = () => {
           )}
         </>
       )}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -77,7 +89,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#fff",
   },
   input: {
     borderWidth: 1,
@@ -105,6 +116,9 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 16,
     color: "#888",
+  },
+  booksContainer: {
+    marginTop: 16,
   },
 });
 

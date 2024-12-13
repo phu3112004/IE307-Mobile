@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { getAllBooks } from "../../helps/helps"; // Đảm bảo bạn import hàm getAllBooks đúng cách
+import { useContext } from "react";
+import { ThemeContext } from "../../context/ThemeContext";
+import ThemeText from "../ThemeText";
+import ThemeView from "../ThemeView";
 
 export default function BookContent({ route }) {
   const { id } = route.params; // Nhận id từ navigation
   const [bookDetails, setBookDetails] = useState(null);
+  const { themeColor } = useContext(ThemeContext);
 
   useEffect(() => {
     const fetchBookDetails = async () => {
@@ -19,11 +31,18 @@ export default function BookContent({ route }) {
   }, [id]);
 
   if (!bookDetails) {
-    return <Text>Loading...</Text>; // Nếu chưa có dữ liệu
+    // Hiển thị ActivityIndicator khi đang tải dữ liệu
+    return (
+      <ThemeView style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#cf3339" />
+      </ThemeView>
+    );
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: themeColor.bgContainer }]}
+    >
       {/* Nền tùy chỉnh */}
       <View style={styles.backgroundContainer}>
         {/* Ảnh sách */}
@@ -31,11 +50,11 @@ export default function BookContent({ route }) {
       </View>
 
       {/* Tiêu đề sách */}
-      <Text style={styles.title}>{bookDetails.title}</Text>
+      <ThemeText style={styles.title}>{bookDetails.title}</ThemeText>
       {/* Tác giả sách */}
       <Text style={styles.author}>Author: {bookDetails.author}</Text>
       {/* Nội dung sách */}
-      <Text style={styles.content}>{bookDetails.content}</Text>
+      <ThemeText style={styles.content}>{bookDetails.content}</ThemeText>
     </ScrollView>
   );
 }
@@ -44,7 +63,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#fff",
   },
   loadingContainer: {
     flex: 1,
@@ -55,7 +73,7 @@ const styles = StyleSheet.create({
   backgroundContainer: {
     width: "100%",
     height: 250, // Chiều cao của background
-    backgroundColor: "#f0f0f0", // Màu nền tùy chỉnh
+    backgroundColor: "transparent", // Màu nền tùy chỉnh
     borderRadius: 10, // Làm tròn các góc nếu muốn
     position: "relative", // Đảm bảo có thể đặt vị trí cho ảnh
     overflow: "hidden", // Giới hạn phần dư ra ngoài

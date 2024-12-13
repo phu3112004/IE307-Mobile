@@ -8,11 +8,12 @@ import {
   BackHandler,
   ToastAndroid,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigation, useIsFocused } from "@react-navigation/native"; // Import các hook
 import Carousel from "react-native-reanimated-carousel";
 import { getAllBooks } from "../helps/helps";
 import BookList from "./../component/BookList";
+import { ThemeContext } from "../context/ThemeContext";
 
 export default function HomeScreen() {
   const [books, setBooks] = useState([]);
@@ -21,6 +22,7 @@ export default function HomeScreen() {
   const [backPressedOnce, setBackPressedOnce] = useState(false);
   const navigation = useNavigation(); // Khởi tạo navigation
   const isFocused = useIsFocused(); // Kiểm tra xem trang hiện tại có phải là HomeScreen không
+  const { themeColor } = useContext(ThemeContext); // Lấy themeColor từ ThemeContext
 
   useEffect(() => {
     const backAction = () => {
@@ -50,11 +52,11 @@ export default function HomeScreen() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const allBooks = await getAllBooks(10, 20);
+      const allBooks = await getAllBooks();
       setBooks(allBooks);
 
       // Chọn 8 cuốn sách đầu tiên làm sách hot
-      const randomBooks = allBooks.slice(0, 4);
+      const randomBooks = allBooks.slice(9, 13);
       setHotBooks(randomBooks);
     };
 
@@ -74,7 +76,9 @@ export default function HomeScreen() {
   ];
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: themeColor.bgContainer }]}
+    >
       <Carousel
         loop
         width={width}
@@ -91,14 +95,14 @@ export default function HomeScreen() {
       <View style={styles.itemContainer}>
         <Text style={styles.subHeader}>Hot Books</Text>
         <BookList
-          books={hotBooks}
+          books={hotBooks} // Truyền danh sách sách hot
           onBookPress={(book) => console.log("Selected Book:", book)}
         />
       </View>
       <View style={styles.itemContainer}>
         <Text style={styles.subHeader}>Our Books</Text>
         <BookList
-          books={books}
+          books={books} // Truyền toàn bộ danh sách sách
           onBookPress={(book) => console.log("Selected Book:", book)}
         />
       </View>

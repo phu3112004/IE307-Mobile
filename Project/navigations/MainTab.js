@@ -1,37 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { BackHandler, ToastAndroid } from "react-native";
+import React, { useEffect, useState, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
-import LibraryScreen from "../screens/LibraryScreen";
+import YourBooksScreen from "../screens/YourBooksScreen";
 import SearchScreen from "../screens/SearchScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import Icon from "react-native-vector-icons/FontAwesome";
 import LibraryIconWithBadge from "../badge/LibraryIconWithBadge";
+import { AuthContext } from "../context/AuthContext"; // Import AuthContext
+import { ThemeContext } from "../context/ThemeContext";
 
 const Tab = createBottomTabNavigator();
 
 export default function MainTab() {
-  const [backPressedOnce, setBackPressedOnce] = useState(false);
-
-  useEffect(() => {
-    const backAction = () => {
-      if (backPressedOnce) {
-        BackHandler.exitApp(); // Thoát ứng dụng nếu nhấn lần thứ hai
-      } else {
-        setBackPressedOnce(true); // Đánh dấu nhấn lần đầu
-        ToastAndroid.show("Press back again to exit", ToastAndroid.SHORT); // Hiển thị thông báo
-        setTimeout(() => setBackPressedOnce(false), 2000); // Reset trạng thái sau 2 giây
-      }
-      return true; // Ngăn hành vi quay lại mặc định
-    };
-
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-
-    return () => backHandler.remove(); // Gỡ listener khi component bị unmount
-  }, [backPressedOnce]);
+  const { userToken } = useContext(AuthContext); // Lấy thông tin người dùng từ context
+  const { theme, themeColor } = useContext(ThemeContext); // Lấy theme từ context
 
   return (
     <Tab.Navigator
@@ -43,9 +25,14 @@ export default function MainTab() {
             iconName = "home";
           } else if (route.name === "Search") {
             iconName = "search";
-          } else if (route.name === "Library") {
+          } else if (route.name === "Your Books") {
+            const badgeCount = userToken?.books?.length || 0; // Đếm số lượng sách trong books
             return (
-              <LibraryIconWithBadge badgeCount={3} color={color} size={size} />
+              <LibraryIconWithBadge
+                badgeCount={badgeCount}
+                color={color}
+                size={size}
+              />
             );
           } else if (route.name === "Profile") {
             iconName = "user";
@@ -55,22 +42,46 @@ export default function MainTab() {
         },
         tabBarActiveTintColor: "#cf3339",
         tabBarInactiveTintColor: "gray",
+        tabBarStyle: {
+          backgroundColor: themeColor.backgroundColor,
+        },
       })}
     >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
-        options={{ headerShown: true }}
+        options={{
+          headerShown: true,
+          title: "Home",
+          headerStyle: {
+            backgroundColor: themeColor.backgroundColor,
+          },
+          headerTintColor: themeColor.color,
+        }}
       />
       <Tab.Screen
         name="Search"
         component={SearchScreen}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: true,
+          title: "Search",
+          headerStyle: {
+            backgroundColor: themeColor.backgroundColor,
+          },
+          headerTintColor: themeColor.color,
+        }}
       />
       <Tab.Screen
-        name="Library"
-        component={LibraryScreen}
-        options={{ headerShown: false }}
+        name="Your Books"
+        component={YourBooksScreen}
+        options={{
+          headerShown: true,
+          title: "Your Books",
+          headerStyle: {
+            backgroundColor: themeColor.backgroundColor,
+          },
+          headerTintColor: themeColor.color,
+        }}
       />
       <Tab.Screen
         name="Profile"

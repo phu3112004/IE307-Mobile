@@ -1,6 +1,6 @@
-export const getAllBooks = async (start, limit) => {
+export const getAllBooks = async () => {
   const data = [];
-  for (let i = start; i <= limit; i++) {
+  for (let i = 1; i <= 50; i++) {
     try {
       const response = await fetch(
         `https://www.gutenberg.org/cache/epub/${i}/pg${i}.txt`
@@ -49,7 +49,7 @@ export const getAllBooks = async (start, limit) => {
         data.push(book);
       }
     } catch (error) {
-      console.error("loi khi lấy sấch", error);
+      console.error(error);
     }
   }
   return data;
