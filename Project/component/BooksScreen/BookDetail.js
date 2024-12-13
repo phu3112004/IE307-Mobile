@@ -15,12 +15,10 @@ export default function BookDetail({ route, navigation }) {
   const { id, title, author, releaseDate, language, image } = route.params;
   const { userToken, setUserToken } = useContext(AuthContext); // Lấy thông tin người dùng từ context
 
-  // Kiểm tra xem sách đã tồn tại trong thư viện hay chưa
   const isBookAdded = userToken.books.includes(id);
 
   const handleSaveBook = async () => {
     try {
-      // Nếu sách đã tồn tại, không thực hiện thêm
       if (isBookAdded) {
         ToastAndroid.show(
           "This book is already in your library!",
@@ -34,7 +32,7 @@ export default function BookDetail({ route, navigation }) {
 
       // Gửi yêu cầu cập nhật dữ liệu lên server
       await axios.patch(`http://${ip}:3000/users/${userToken.id}`, {
-        books: updatedBooks,
+        recent: updatedRecent,
       });
 
       // Cập nhật lại state userToken trong ứng dụng
@@ -61,21 +59,18 @@ export default function BookDetail({ route, navigation }) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("BookContent", { id })}
+        onPress={handleReadBook} // Gọi handleReadBook khi nhấn nút
       >
         <Text style={styles.buttonText}>Read Content</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[
-          styles.button,
-          isBookAdded && styles.disabledButton, // Áp dụng style cho nút khi đã thêm
-        ]}
-        onPress={handleSaveBook} // Xử lý lưu sách vào thư viện
-        disabled={isBookAdded} // Vô hiệu hóa nút nếu sách đã được thêm
+        style={[styles.button, isBookAdded && styles.disabledButton]} // Áp dụng style cho nút khi đã thêm
+        onPress={handleSaveBook} // Xử lý lưu sách vào thư viện hoặc xóa sách khỏi thư viện
+        disabled={isBookAdded && false} // Không vô hiệu hóa nút, vì có thể xóa sách
       >
         <Text style={styles.buttonText}>
-          {isBookAdded ? "Already in Library" : "Save to Library"}
+          {isBookAdded ? "Remove from Library" : "Save to Library"}
         </Text>
       </TouchableOpacity>
     </View>
@@ -113,7 +108,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   button: {
-    backgroundColor: "red",
+    backgroundColor: "#cf3339",
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -126,6 +121,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   disabledButton: {
-    backgroundColor: "#ccc", // Thay đổi màu sắc nút khi bị vô hiệu hóa
+    backgroundColor: "#ccc",
   },
 });

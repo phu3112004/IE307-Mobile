@@ -5,12 +5,7 @@
       "name": "Phú Trần",
       "username": "phutran",
       "password": "1234",
-      "books": [
-        49,
-        11,
-        4,
-        1
-      ],
+      "books": [49, 11, 4, 1],
       "recent": []
     },
     {
@@ -18,10 +13,7 @@
       "name": "Phước Huỳnh",
       "username": "phuochuynh",
       "password": "kimoiii",
-      "books": [
-        49,
-        43
-      ]
+      "books": [49, 43]
     },
     {
       "id": "8879",
@@ -42,13 +34,8 @@
       "name": "Minh Béo ",
       "username": "dhm",
       "password": "123",
-      "books": [
-        11,
-        16,
-        2,
-        2,
-        1
-      ]
+      "books": [2, 2, 16],
+      "recent": [11, 10]
     }
   ]
 }

@@ -65,7 +65,7 @@ export default function MainTab() {
       <Tab.Screen
         name="Search"
         component={SearchScreen}
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
       />
       <Tab.Screen
         name="Library"

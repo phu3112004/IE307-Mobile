@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
 import { getAllBooks } from "../../helps/helps"; // Đảm bảo bạn import hàm getAllBooks đúng cách
 
 export default function BookContent({ route }) {
@@ -26,12 +19,7 @@ export default function BookContent({ route }) {
   }, [id]);
 
   if (!bookDetails) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />{" "}
-        {/* Hiệu ứng xoay vòng */}
-      </View>
-    );
+    return <Text>Loading...</Text>; // Nếu chưa có dữ liệu
   }
 
   return (
