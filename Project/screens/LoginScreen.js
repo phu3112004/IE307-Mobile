@@ -28,7 +28,7 @@ const LoginScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Image
         source={{
-          uri: "https://yt3.googleusercontent.com/fCqO8VecoZZY2AKnmvTzFVRlxL44QAd1oIu6wJIFYVtG7VFfv9XpiOL5WkMzE0SlCMaH0Hh_fA=s900-c-k-c0x00ffffff-no-rj",
+          uri: "https://images.scalebranding.com/fd3d233c-d92c-4e0c-93b5-cf3b92327c34.png",
         }}
         style={styles.logo}
       />
@@ -36,12 +36,7 @@ const LoginScreen = ({ navigation }) => {
 
       <View style={styles.inputContainer}>
         <View style={styles.iconStyleContainer}>
-          <Icon
-            name="envelope"
-            size={24}
-            color="#000"
-            style={styles.iconStyle}
-          />
+          <Icon name="user" size={24} color="#000" style={styles.iconStyle} />
         </View>
         <TextInput
           style={styles.input}
