@@ -69,6 +69,7 @@ export const AuthProvider = ({ children }) => {
           name: user.name,
           username: user.username,
           books: user.books || [],
+          recent: user.recent || [],
         };
         setUserToken(token);
         showToast("Log in successful");
@@ -83,6 +84,7 @@ export const AuthProvider = ({ children }) => {
         name: null,
         username: null,
         books: [],
+        recent: [],
       });
       showToast("Logged out successfully");
     },

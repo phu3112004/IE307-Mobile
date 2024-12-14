@@ -65,7 +65,7 @@ export default function RecentBooks() {
       {books.length > 0 ? (
         <BookList books={books} />
       ) : (
-        <Text style={styles.noBooks}>No books in your library.</Text>
+        <Text style={styles.noBooks}>No books read recently.</Text>
       )}
     </ScrollView>
   );

@@ -5,6 +5,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AuthStack from "./navigations/AuthStack";
 import BookStack from "./navigations/BookStack";
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs([
+  "VirtualizedLists should never be nested inside plain ScrollViews",
+]);
+
+console.warn = () => {};
+console.error = () => {};
 
 const Stack = createStackNavigator();
 
