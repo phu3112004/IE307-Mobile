@@ -33,8 +33,8 @@ export default function BookDetail({ route, navigation }) {
           ToastAndroid.SHORT
         );
       } else {
-        // Nếu sách chưa có trong thư viện, thêm sách vào thư viện
-        const updatedBooks = [id, ...userToken.books];
+        // Nếu sách chưa có trong thư viện, thêm sách vào thư viện (thêm vào cuối)
+        const updatedBooks = [...userToken.books, id]; // Thêm sách vào cuối
         await axios.patch(`http://${ip}:3000/users/${userToken.id}`, {
           books: updatedBooks,
         });
@@ -56,10 +56,7 @@ export default function BookDetail({ route, navigation }) {
       const currentRecent = userToken.recent || []; // Nếu recent chưa có, khởi tạo mảng rỗng
 
       // Nếu sách đã có trong recent, xóa khỏi mảng và thêm vào đầu
-      const updatedRecent = currentRecent.filter((bookId) => bookId !== id);
-      updatedRecent.unshift(id); // Thêm vào đầu mảng recent
-
-      // Cập nhật lại cơ sở dữ liệu
+      const updatedRecent = [id, ...currentRecent.filter((bookId) => bookId !== id)]; // Thêm vào đầu mảng recent
       await axios.patch(`http://${ip}:3000/users/${userToken.id}`, {
         recent: updatedRecent,
       });
