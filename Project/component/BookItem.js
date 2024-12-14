@@ -16,7 +16,8 @@ const BookItem = ({ item }) => {
           ? { backgroundColor: "#222" }
           : theme === "light"
           ? { backgroundColor: "#fff" }
-          : { backgroundColor: "#f7f1d5" },
+          : { backgroundColor: "#fffce0" },
+        { borderColor: theme === "dark" ? "#444" : "#ddd" },
       ]}
       onPress={() =>
         navigation.navigate("BookDetail", {
@@ -52,7 +53,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: "#ddd",
     alignItems: "center",
   },
   bookImage: {

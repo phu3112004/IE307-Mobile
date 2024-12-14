@@ -67,7 +67,7 @@ const SearchScreen = () => {
         <>
           {confirmedQuery && (
             <Text style={[styles.resultText, { color: themeColor.color }]}>
-              Results of {`"${confirmedQuery}"`}: {results.length} books found
+              Results of {`"${confirmedQuery}"`}: {results.length} books found.
             </Text>
           )}
           {results.length > 0 ? (
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   button: {
-    backgroundColor: "#007BFF",
+    backgroundColor: "#cf3339",
     padding: 10,
     borderRadius: 4,
     alignItems: "center",

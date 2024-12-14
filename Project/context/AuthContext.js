@@ -43,7 +43,6 @@ export const AuthProvider = ({ children }) => {
         showToast("Sign up successful");
         navigation.navigate("Login");
       } catch (error) {
-        console.error("Error during sign up:", error);
         showToast("Something went wrong. Please try again");
       }
     },
@@ -74,7 +73,6 @@ export const AuthProvider = ({ children }) => {
         setUserToken(token);
         showToast("Log in successful");
       } catch (error) {
-        console.error("Error during login:", error.message);
         showToast("Username or password is incorrect");
       }
     },

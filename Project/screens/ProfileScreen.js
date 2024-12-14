@@ -7,6 +7,7 @@ import {
   Modal,
   TextInput,
   TouchableOpacity,
+  Switch,
 } from "react-native";
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
@@ -25,6 +26,8 @@ export default function ProfileScreen() {
 
   const [isModalProfileVisible, setModalProfileVisible] = useState(false);
   const [isModalPasswordVisible, setModalPasswordVisible] = useState(false);
+  const [isModalThemeVisible, setModalThemeVisible] = useState(false);
+
   const [editedName, setEditedName] = useState(userToken.name);
   const [editedUsername, setEditedUsername] = useState(userToken.username);
   const [currentPassword, setCurrentPassword] = useState("");
@@ -63,7 +66,6 @@ export default function ProfileScreen() {
       logOut();
       navigation.replace("AuthStack");
     } catch (error) {
-      console.error("Error updating password:", error);
       alert("Something went wrong, please try again.");
     }
   };
@@ -79,7 +81,6 @@ export default function ProfileScreen() {
       alert("Profile updated successfully!");
       setModalProfileVisible(false);
     } catch (error) {
-      console.error("Error updating profile:", error);
       alert("Something went wrong, please try again.");
     }
   };
@@ -109,86 +110,13 @@ export default function ProfileScreen() {
         <Text style={styles.username}>@{userToken.username}</Text>
       </ThemeView>
 
-      <ThemeView style={styles.themeSelection}>
-        <ThemeText
-          style={[styles.label, theme === "dark" && { color: "#fff" }]}
-        >
-          Select Theme
-        </ThemeText>
-        <ThemeView style={styles.radioGroup}>
-          <TouchableOpacity
-            style={styles.radioButton}
-            onPress={() => handleThemeChange("light")}
-          >
-            <Icon
-              name="sun-o"
-              size={16}
-              style={{ marginRight: 5 }}
-              color={
-                theme === "light"
-                  ? "#cf3339"
-                  : theme === "dark"
-                  ? "#fff"
-                  : "#000"
-              }
-            />
-            <Text
-              style={[
-                theme === "light"
-                  ? styles.radioSelected
-                  : theme === "dark" && { color: "#fff" },
-                styles.themeBtn,
-              ]}
-            >
-              Light
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.radioButton}
-            onPress={() => handleThemeChange("dark")}
-          >
-            <Icon
-              name="moon-o"
-              size={16}
-              style={{ marginRight: 5 }}
-              color={theme === "dark" ? "#cf3339" : "#000"}
-            />
-            <Text
-              style={[
-                theme === "dark" ? styles.radioSelected : null,
-                styles.themeBtn,
-              ]}
-            >
-              Dark
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.radioButton}
-            onPress={() => handleThemeChange("eye")}
-          >
-            <Icon
-              name="eye"
-              size={16}
-              style={{ marginRight: 5 }}
-              color={
-                theme === "eye" ? "#cf3339" : theme === "dark" ? "#fff" : "#000"
-              }
-            />
-            <Text
-              style={[
-                theme === "eye"
-                  ? styles.radioSelected
-                  : theme === "dark" && { color: "#fff" },
-                styles.themeBtn,
-              ]}
-            >
-              Eye Care
-            </Text>
-          </TouchableOpacity>
-        </ThemeView>
-      </ThemeView>
-
       <ThemeView style={styles.btnContainer}>
+        <TouchableOpacity
+          style={[styles.btn, styles.editButton]}
+          onPress={() => setModalThemeVisible(true)}
+        >
+          <Text style={styles.btnText}>SET THEME</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={[styles.btn, styles.editButton]}
           onPress={() => setModalProfileVisible(true)}
@@ -299,6 +227,75 @@ export default function ProfileScreen() {
           </ThemeView>
         </View>
       </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalThemeVisible}
+        onRequestClose={() => setModalThemeVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <ThemeView style={styles.modalContent}>
+            <ThemeText style={styles.modalTitle}>Set Theme</ThemeText>
+            <ThemeView style={styles.switchGroup}>
+              <View style={styles.switchRow}>
+                <ThemeText
+                  style={[
+                    theme === "light" ? styles.radioSelected : null,
+                    styles.themeBtn,
+                  ]}
+                >
+                  <Icon name="sun-o" size={20} /> Light
+                </ThemeText>
+                <Switch
+                  value={theme === "light"}
+                  onValueChange={() => handleThemeChange("light")}
+                  trackColor={{ false: "#767577", true: "#cf3339" }}
+                  thumbColor={theme === "light" ? "#cf3339" : "#f4f3f4"}
+                />
+              </View>
+              <View style={styles.switchRow}>
+                <ThemeText
+                  style={[
+                    theme === "dark" ? styles.radioSelected : null,
+                    styles.themeBtn,
+                  ]}
+                >
+                  <Icon name="moon-o" size={20} /> Dark
+                </ThemeText>
+                <Switch
+                  value={theme === "dark"}
+                  onValueChange={() => handleThemeChange("dark")}
+                  trackColor={{ false: "#767577", true: "#cf3339" }}
+                  thumbColor={theme === "dark" ? "#cf3339" : "#f4f3f4"}
+                />
+              </View>
+              <View style={styles.switchRow}>
+                <ThemeText
+                  style={[
+                    theme === "eye" ? styles.radioSelected : null,
+                    styles.themeBtn,
+                  ]}
+                >
+                  <Icon name="eye" size={20} /> Eye-care
+                </ThemeText>
+                <Switch
+                  value={theme === "eye"}
+                  onValueChange={() => handleThemeChange("eye")}
+                  trackColor={{ false: "#767577", true: "#cf3339" }}
+                  thumbColor={theme === "eye" ? "#cf3339" : "#f4f3f4"}
+                />
+              </View>
+              <ThemeView style={{ marginVertical: 5 }} />
+              <Button
+                title="Close"
+                onPress={() => setModalThemeVisible(false)}
+                color={"#cf3339"}
+              />
+            </ThemeView>
+          </ThemeView>
+        </View>
+      </Modal>
     </ThemeView>
   );
 }
@@ -354,23 +351,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 10,
   },
-  radioGroup: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 50,
-  },
   themeBtn: {
     fontSize: 18,
   },
-  radioButton: {
+  switchGroup: {
+    marginTop: 20,
+  },
+  switchRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 5,
-  },
-  radioSelected: {
-    fontWeight: "bold",
-    color: "#cf3339",
+    justifyContent: "space-between",
+    marginVertical: 10,
   },
   btnContainer: {
     flexDirection: "column",
