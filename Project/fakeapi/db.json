@@ -3,16 +3,18 @@
     {
       "id": "1",
       "name": "Phú Trần",
-      "username": "phutran",
-      "password": "1234",
+      "username": "phu",
+      "password": "123",
       "books": [
         23,
         22,
         11,
         4,
-        1
+        1,
+        37
       ],
       "recent": [
+        37,
         3,
         22,
         11

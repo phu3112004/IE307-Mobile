@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     id: null,
     name: null,
     username: null,
+    password: null,
     books: [],
     recent: [],
   });
@@ -69,6 +70,7 @@ export const AuthProvider = ({ children }) => {
           id: user.id,
           name: user.name,
           username: user.username,
+          password: user.password,
           books: user.books || [],
           recent: user.recent || [],
         };
@@ -84,6 +86,7 @@ export const AuthProvider = ({ children }) => {
         id: null,
         name: null,
         username: null,
+        password: null,
         books: [],
         recent: [],
       });
