@@ -13,8 +13,8 @@ export default function BookScreen() {
   return (
     <BookTab.Navigator initialRouteName="Library">
       <BookTab.Screen
-        name="Recent"
-        component={RecentScreen}
+        name="Library"
+        component={LibraryScreen}
         options={{
           tabBarActiveTintColor: themeColor.color,
           tabBarInactiveTintColor: "gray",
@@ -28,8 +28,8 @@ export default function BookScreen() {
         }}
       />
       <BookTab.Screen
-        name="Library"
-        component={LibraryScreen}
+        name="Recent"
+        component={RecentScreen}
         options={{
           tabBarActiveTintColor: themeColor.color,
           tabBarInactiveTintColor: "gray",
