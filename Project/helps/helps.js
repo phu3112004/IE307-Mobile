@@ -54,3 +54,42 @@ export const getAllBooks = async () => {
   }
   return data;
 };
+
+export const getBookById = async (id) => {
+  try {
+    const response = await fetch(`https://www.gutenberg.org/cache/epub/${id}/pg${id}.txt`);
+    const text = await response.text();
+
+    const titleMatch = text.match(/Title:\s*(.+)/);
+    const authorMatch = text.match(/Author:\s*(.+)/);
+    const releaseDateMatch = text.match(/Most recently updated:\s*(.+)/i);
+    const languageMatch = text.match(/Language:\s*(.+)/);
+
+    const contentStartIndex = text.indexOf("*** START OF THE PROJECT GUTENBERG EBOOK");
+
+    if (contentStartIndex !== -1) {
+      const contentAfterStart = text.slice(contentStartIndex + "*** START OF THE PROJECT GUTENBERG EBOOK".length).trim();
+      const bookTitleMatch = contentAfterStart.match(/^([A-Z\s]+)\s*\*{3}/);
+      const bookTitle = bookTitleMatch ? bookTitleMatch[1].trim() : "Unknown";
+
+      const content = contentAfterStart.replace(bookTitle + " ***", "").trim();
+
+      const book = {
+        id: id,
+        title: titleMatch ? titleMatch[1] : bookTitle,
+        author: authorMatch ? authorMatch[1] : "Unknown",
+        releaseDate: releaseDateMatch ? releaseDateMatch[1] : "Unknown",
+        language: languageMatch ? languageMatch[1] : "Unknown",
+        image: `https://www.gutenberg.org/cache/epub/${id}/pg${id}.cover.medium.jpg`,
+        content: content,
+      };
+
+      return book;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Lỗi khi lấy sách:", error);
+    return null;
+  }
+};

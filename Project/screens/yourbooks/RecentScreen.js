@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import {
-  View,
   Text,
-  FlatList,
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
 import { AuthContext } from "../../context/AuthContext"; // Context chứa thông tin người dùng
 import BookList from "../../component/BookList"; // Component hiển thị danh sách sách
-import { getAllBooks } from "../../helps/helps"; // Import hàm getAllBooks
+import { getBookById } from "../../helps/helps"; // Import hàm getBookById
 import { ScrollView } from "react-native-gesture-handler";
 import ThemeText from "../../component/ThemeText";
 import { ThemeContext } from "../../context/ThemeContext";
@@ -23,22 +21,19 @@ export default function RecentBooks() {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        // Dọn dẹp mảng books trước khi tải lại dữ liệu
-        setBooks([]); // Reset mảng sách
-
-        // Lấy tất cả sách từ Project Gutenberg
-        const allBooks = await getAllBooks();
-        console.log("All Books:", allBooks); // Log tất cả các sách, kiểm tra xem có đủ 5 cuốn không
-
-        // Lấy danh sách sách từ mảng books của userToken
         const bookIds = userToken.recent || []; // Mảng các id sách của người dùng
         console.log("User's book IDs:", bookIds); // Log mảng ID sách của người dùng
 
-        // Lọc các sách có id trong mảng bookIds
-        const userBooks = allBooks.filter((book) => bookIds.includes(book.id));
-        console.log("Filtered Books:", userToken.recent); // Log các sách được lọc theo id
+        // Sử dụng Promise.all để tải tất cả sách theo ID
+        const userBooks = await Promise.all(
+          bookIds.map(async (id) => {
+            const book = await getBookById(id); // Lấy từng sách theo ID
+            return book; // Trả về sách tìm được
+          })
+        );
+        console.log("Filtered Books:", userBooks); // Log các sách được lọc theo id
 
-        setBooks(userBooks); // Cập nhật danh sách sách cho người dùng
+        setBooks(userBooks.filter((book) => book !== null)); // Cập nhật danh sách sách cho người dùng
       } catch (error) {
         console.error("Error fetching books:", error);
       } finally {
@@ -47,7 +42,7 @@ export default function RecentBooks() {
     };
 
     fetchBooks();
-  }, [userToken.recent]); // Khi userToken.books thay đổi thì gọi lại
+  }, [userToken.recent]); // Khi userToken.recent thay đổi thì gọi lại
 
   if (loading) {
     return (
