@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
     name: null,
     username: null,
     books: [],
+    recent: [],
   });
 
   const showToast = (message) => {
