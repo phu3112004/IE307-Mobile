@@ -33,7 +33,9 @@
       "name": "Quan Nguyen ",
       "username": "teo16",
       "password": "123",
-      "books": [],
+      "books": [
+        7
+      ],
       "recent": []
     },
     {
