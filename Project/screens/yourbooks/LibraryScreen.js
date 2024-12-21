@@ -22,7 +22,6 @@ export default function LibraryScreen() {
 
         // Lấy tất cả ID sách của người dùng
         const bookIds = userToken.books || []; // Mảng các ID sách của người dùng
-        console.log("User's book IDs:", bookIds); // Log mảng ID sách của người dùng
 
         // Sử dụng Promise.all để lấy tất cả sách theo ID
         const userBooks = await Promise.all(
@@ -31,8 +30,6 @@ export default function LibraryScreen() {
             return book; // Trả về sách tìm được
           })
         );
-
-        console.log("Filtered Books:", userBooks); // Log các sách đã lọc
 
         setBooks(userBooks.filter((book) => book !== null)); // Cập nhật danh sách sách cho người dùng
       } catch (error) {

@@ -96,14 +96,12 @@ export default function HomeScreen() {
         <Text style={styles.subHeader}>Hot Books</Text>
         <BookList
           books={hotBooks} // Truyền danh sách sách hot
-          onBookPress={(book) => console.log("Selected Book:", book)}
         />
       </View>
       <View style={styles.itemContainer}>
         <Text style={styles.subHeader}>Our Books</Text>
         <BookList
           books={books} // Truyền toàn bộ danh sách sách
-          onBookPress={(book) => console.log("Selected Book:", book)}
         />
       </View>
     </ScrollView>

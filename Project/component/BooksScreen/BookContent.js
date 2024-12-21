@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   View,
   Text,
@@ -6,9 +6,9 @@ import {
   ScrollView,
   Image,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
-import { getBookById } from "../../helps/helps"; // Đảm bảo bạn import hàm getAllBooks đúng cách
-import { useContext } from "react";
+import { getBookById } from "../../helps/helps";
 import { ThemeContext } from "../../context/ThemeContext";
 import ThemeText from "../ThemeText";
 import ThemeView from "../ThemeView";
@@ -16,7 +16,12 @@ import ThemeView from "../ThemeView";
 export default function BookContent({ route }) {
   const { id } = route.params; // Nhận id từ navigation
   const [bookDetails, setBookDetails] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 1500; // Số ký tự tối đa trên mỗi trang
   const { themeColor } = useContext(ThemeContext);
+
+  // Tạo ref cho ScrollView
+  const scrollViewRef = useRef(null);
 
   useEffect(() => {
     const fetchBookDetails = async () => {
@@ -37,16 +42,77 @@ export default function BookContent({ route }) {
     );
   }
 
+  // Tách nội dung theo từ để không bị cắt giữa từ
+  const splitContentByWords = (content, maxLength) => {
+    const words = content.split(" ");
+    const pages = [];
+    let currentPage = "";
+
+    for (const word of words) {
+      if ((currentPage + word).length <= maxLength) {
+        currentPage += word + " ";
+      } else {
+        pages.push(currentPage.trim());
+        currentPage = word + " ";
+      }
+    }
+    if (currentPage) {
+      pages.push(currentPage.trim());
+    }
+
+    return pages;
+  };
+
+  const contentPages = splitContentByWords(bookDetails.content, itemsPerPage);
+
+  // Hàm xử lý khi chuyển trang
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+
+    // Cuộn lên đầu trang
+    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
+  };
+
   return (
     <ScrollView
+      ref={scrollViewRef}
       style={[styles.container, { backgroundColor: themeColor.bgContainer }]}
     >
-      <View style={styles.backgroundContainer}>
-        <Image source={{ uri: bookDetails.image }} style={styles.image} />
-      </View>
       <ThemeText style={styles.title}>{bookDetails.title}</ThemeText>
       <Text style={styles.author}>Author: {bookDetails.author}</Text>
-      <ThemeText style={styles.content}>{bookDetails.content}</ThemeText>
+      <ThemeText style={styles.content}>
+        {contentPages[currentPage - 1]}
+      </ThemeText>
+
+      {/* Nút phân trang */}
+      <View style={styles.pagination}>
+        <TouchableOpacity
+          style={[
+            styles.paginationButton,
+            currentPage === 1 && styles.disabledButton,
+          ]}
+          onPress={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          <Text style={styles.buttonText}>Trước</Text>
+        </TouchableOpacity>
+        <Text style={styles.pageInfo}>
+          Trang {currentPage} / {contentPages.length}
+        </Text>
+        <TouchableOpacity
+          style={[
+            styles.paginationButton,
+            currentPage === contentPages.length && styles.disabledButton,
+          ]}
+          onPress={() =>
+            currentPage < contentPages.length &&
+            handlePageChange(currentPage + 1)
+          }
+          disabled={currentPage === contentPages.length}
+        >
+          <Text style={styles.buttonText}>Sau</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 }
@@ -71,14 +137,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginBottom: 20,
   },
-  image: {
-    width: "150%",
-    height: "100%",
-    position: "absolute",
-    left: "-25%",
-    resizeMode: "contain",
-    top: 0,
-  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
@@ -94,5 +152,32 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 16,
     lineHeight: 24,
+  },
+  pagination: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 20,
+    paddingHorizontal: 10,
+    marginBottom: 50,
+  },
+  paginationButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: "#cf3339",
+    borderRadius: 5,
+  },
+  disabledButton: {
+    backgroundColor: "#ccc",
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  pageInfo: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
   },
 });

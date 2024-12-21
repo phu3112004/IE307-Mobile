@@ -33,8 +33,10 @@ const SearchScreen = () => {
     setConfirmedQuery(searchQuery); // Cập nhật từ khóa đã xác nhận
     // Mô phỏng tìm kiếm sách
     setTimeout(() => {
-      const filteredBooks = books.filter((book) =>
-        book.title.toLowerCase().includes(searchQuery.toLowerCase())
+      const filteredBooks = books.filter(
+        (book) =>
+          book.title.toLowerCase().includes(searchQuery.toLowerCase()) || // Tìm theo tên sách
+          book.author.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setResults(filteredBooks);
       setIsLoading(false); // Tắt trạng thái loading

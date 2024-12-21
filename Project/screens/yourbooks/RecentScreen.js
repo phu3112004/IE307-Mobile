@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-} from "react-native";
+import { Text, StyleSheet, ActivityIndicator } from "react-native";
 import { AuthContext } from "../../context/AuthContext"; // Context chứa thông tin người dùng
 import BookList from "../../component/BookList"; // Component hiển thị danh sách sách
 import { getBookById } from "../../helps/helps"; // Import hàm getBookById
@@ -22,7 +18,6 @@ export default function RecentBooks() {
     const fetchBooks = async () => {
       try {
         const bookIds = userToken.recent || []; // Mảng các id sách của người dùng
-        console.log("User's book IDs:", bookIds); // Log mảng ID sách của người dùng
 
         // Sử dụng Promise.all để tải tất cả sách theo ID
         const userBooks = await Promise.all(
@@ -31,7 +26,6 @@ export default function RecentBooks() {
             return book; // Trả về sách tìm được
           })
         );
-        console.log("Filtered Books:", userBooks); // Log các sách được lọc theo id
 
         setBooks(userBooks.filter((book) => book !== null)); // Cập nhật danh sách sách cho người dùng
       } catch (error) {
