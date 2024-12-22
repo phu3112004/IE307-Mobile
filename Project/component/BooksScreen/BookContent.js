@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  Image,
+  TextInput,
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
@@ -17,6 +17,7 @@ export default function BookContent({ route }) {
   const { id } = route.params; // Nhận id từ navigation
   const [bookDetails, setBookDetails] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageInput, setPageInput] = useState("1"); // State lưu số trang nhập
   const itemsPerPage = 1500; // Số ký tự tối đa trên mỗi trang
   const { themeColor } = useContext(ThemeContext);
 
@@ -67,10 +68,23 @@ export default function BookContent({ route }) {
 
   // Hàm xử lý khi chuyển trang
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    if (page >= 1 && page <= contentPages.length) {
+      setCurrentPage(page);
+      setPageInput(`${page}`); // Cập nhật giá trị ô nhập
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
+    }
+  };
 
-    // Cuộn lên đầu trang
-    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
+  // Xử lý khi nhập số trang và nhấn Enter
+  const handlePageInputSubmit = () => {
+    const page = parseInt(pageInput, 10);
+    if (page > contentPages.length || page < 1 || isNaN(page)) {
+      alert("Invalid page number");
+      return;
+    } else {
+      handlePageChange(page);
+      setPageInput(`${page}`); // Xóa ô nhập sau khi nhấn Enter
+    }
   };
 
   return (
@@ -84,7 +98,6 @@ export default function BookContent({ route }) {
         {contentPages[currentPage - 1]}
       </ThemeText>
 
-      {/* Nút phân trang */}
       <View style={styles.pagination}>
         <TouchableOpacity
           style={[
@@ -94,11 +107,21 @@ export default function BookContent({ route }) {
           onPress={() => currentPage > 1 && handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
-          <Text style={styles.buttonText}>Trước</Text>
+          <Text style={styles.buttonText}>Previous</Text>
         </TouchableOpacity>
-        <Text style={styles.pageInfo}>
-          Trang {currentPage} / {contentPages.length}
-        </Text>
+        <View style={styles.pageInfoContainer}>
+          <ThemeText style={styles.pageLabel}>Page</ThemeText>
+          <TextInput
+            style={[styles.pageInput, { color: themeColor.color }]}
+            value={pageInput}
+            onChangeText={setPageInput}
+            keyboardType="numeric"
+            onSubmitEditing={handlePageInputSubmit}
+          />
+          <ThemeText style={styles.pageLabel}>
+            / {contentPages.length}
+          </ThemeText>
+        </View>
         <TouchableOpacity
           style={[
             styles.paginationButton,
@@ -110,7 +133,7 @@ export default function BookContent({ route }) {
           }
           disabled={currentPage === contentPages.length}
         >
-          <Text style={styles.buttonText}>Sau</Text>
+          <Text style={styles.buttonText}>Next</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -127,15 +150,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
-  },
-  backgroundContainer: {
-    width: "100%",
-    height: 250,
-    backgroundColor: "transparent",
-    borderRadius: 10,
-    position: "relative",
-    overflow: "hidden",
-    marginBottom: 20,
   },
   title: {
     fontSize: 24,
@@ -175,9 +189,21 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
-  pageInfo: {
+  pageInfoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  pageLabel: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#333",
+  },
+  pageInput: {
+    borderWidth: 1,
+    borderColor: "#888",
+    borderRadius: 5,
+    width: 50,
+    textAlign: "center",
+    marginHorizontal: 5,
   },
 });
