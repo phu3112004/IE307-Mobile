@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
 import { getBookById } from "../../helps/helps";
 import { ThemeContext } from "../../context/ThemeContext";
 import ThemeText from "../ThemeText";
@@ -99,16 +100,15 @@ export default function BookContent({ route }) {
       </ThemeText>
 
       <View style={styles.pagination}>
+        {/* Nút quay lại */}
         <TouchableOpacity
-          style={[
-            styles.paginationButton,
-            currentPage === 1 && styles.disabledButton,
-          ]}
+          style={[styles.paginationButton, currentPage === 1 && styles.disabledButton]}
           onPress={() => currentPage > 1 && handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
-          <Text style={styles.buttonText}>Previous</Text>
+          <Icon name="chevron-left" size={20} color={currentPage === 1 ? "#ccc" : "#fff"} />
         </TouchableOpacity>
+
         <View style={styles.pageInfoContainer}>
           <ThemeText style={styles.pageLabel}>Page</ThemeText>
           <TextInput
@@ -122,18 +122,14 @@ export default function BookContent({ route }) {
             / {contentPages.length}
           </ThemeText>
         </View>
+
+        {/* Nút tiếp theo */}
         <TouchableOpacity
-          style={[
-            styles.paginationButton,
-            currentPage === contentPages.length && styles.disabledButton,
-          ]}
-          onPress={() =>
-            currentPage < contentPages.length &&
-            handlePageChange(currentPage + 1)
-          }
+          style={[styles.paginationButton, currentPage === contentPages.length && styles.disabledButton]}
+          onPress={() => currentPage < contentPages.length && handlePageChange(currentPage + 1)}
           disabled={currentPage === contentPages.length}
         >
-          <Text style={styles.buttonText}>Next</Text>
+          <Icon name="chevron-right" size={20} color={currentPage === contentPages.length ? "#ccc" : "#fff"} />
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -177,9 +173,9 @@ const styles = StyleSheet.create({
   },
   paginationButton: {
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 14,
     backgroundColor: "#cf3339",
-    borderRadius: 5,
+    borderRadius: "50%",
   },
   disabledButton: {
     backgroundColor: "#ccc",
