@@ -4,16 +4,18 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  FlatList,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import Carousel from "react-native-reanimated-carousel";
 import { getAllProducts } from "../helps/helps";
 import { ScrollView } from "react-native-gesture-handler";
+import ProductList from "../components/ProductList";
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const [newProducts, setNewProducts] = useState([]);
   const [hotProducts, setHotProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const width = Dimensions.get("window").width;
 
   useEffect(() => {
@@ -21,6 +23,7 @@ export default function HomeScreen() {
       const products = await getAllProducts();
       setNewProducts(products.filter((product) => product.rating.rate <= 4));
       setHotProducts(products.filter((product) => product.rating.rate > 4));
+      setLoading(false);
     };
 
     fetchProducts();
@@ -28,16 +31,27 @@ export default function HomeScreen() {
 
   const bannerData = [
     {
-      uri: "https://intphcm.com/data/upload/banner-thoi-trang.jpg",
+      uri: "https://templates.simplified.co/thumb/3446e660-7af3-4ff6-86ce-755afcde8fcd.jpg",
     },
     {
       uri: "https://cdn.shopify.com/s/files/1/1115/6326/files/B1004_Diamonds_banner_3_thumb_e01734f7-45ee-4a5d-a2c6-cd722e1f0a23.jpg?v=1511876038",
     },
     {
-      uri: "https://img.freepik.com/free-vector/flat-design-electronics-store-facebook-cover_23-2151098080.jpg",
+      uri: "https://i0.wp.com/img.paisawapas.com/ovz3vew9pw/2023/01/30121843/Untitled-1.jpg",
     },
   ];
-
+  if (loading) {
+    return (
+      <View
+        style={[
+          styles.container,
+          { justifyContent: "center", alignContent: "center" },
+        ]}
+      >
+        <ActivityIndicator size="large" color="#cf3339" />
+      </View>
+    );
+  }
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Shopping is cheaper than psychiatrist</Text>
@@ -56,44 +70,10 @@ export default function HomeScreen() {
       />
       <View style={styles.itemContainer}>
         <Text style={styles.subHeader}>Hot Deals</Text>
-        <FlatList
-          data={hotProducts}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.flatListContent}
-          numColumns={2}
-          nestedScrollEnabled={true}
-          renderItem={({ item }) => (
-            <View style={styles.productItem}>
-              <Image
-                source={{ uri: item.image }}
-                style={styles.productItemImage}
-              />
-              <Text>{item.title}</Text>
-              <Text>{item.rating.rate}</Text>
-              <Text>${item.price}</Text>
-            </View>
-          )}
-        />
+        <ProductList data={hotProducts} navigation={navigation} />
 
         <Text style={styles.subHeader}>New Arrivals</Text>
-        <FlatList
-          data={newProducts}
-          keyExtractor={(item) => item.id.toString()}
-          nestedScrollEnabled={true}
-          contentContainerStyle={styles.flatListContent}
-          numColumns={2}
-          renderItem={({ item }) => (
-            <View style={styles.productItem}>
-              <Image
-                source={{ uri: item.image }}
-                style={styles.productItemImage}
-              />
-              <Text>{item.title}</Text>
-              <Text>{item.rating.rate}</Text>
-              <Text>${item.price}</Text>
-            </View>
-          )}
-        />
+        <ProductList data={newProducts} navigation={navigation} />
       </View>
     </ScrollView>
   );
@@ -130,19 +110,5 @@ const styles = StyleSheet.create({
   itemContainer: {
     marginTop: 20,
     paddingHorizontal: 10,
-  },
-  flatListContent: {
-    marginLeft: -5,
-  },
-  productItem: {
-    width: Dimensions.get("window").width / 2 - 15,
-    margin: 5,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-  },
-  productItemImage: {
-    width: "100%",
-    height: 200,
   },
 });

@@ -4,7 +4,7 @@ import axios from "axios";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [userToken, setUserToken] = useState(null);
+  const [userToken, setUserToken] = useState("");
 
   const authContext = {
     logIn: async (username, password) => {
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error("Username or password is incorrect");
       }
     },
-    logOut: () => setUserToken(null),
+    logOut: () => setUserToken(""),
     userToken,
   };
 

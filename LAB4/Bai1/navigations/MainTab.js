@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../screens/HomeScreen";
-import CategoryScreen from "../screens/CategoryScreen";
 import CartScreen from "../screens/CartScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import Icon from "react-native-vector-icons/FontAwesome";
 import CartIconWithBadge from "../badge/CartIconWithBadge";
+import HomeStack from "./HomeStack";
+import CategoryStack from "./CategoryStack";
+import { AuthContext } from "../context/AuthContext";
 
 const Tab = createBottomTabNavigator();
-export default function MainTab() {
+export default function MainTab({ navigation }) {
+  const { userToken } = useContext(AuthContext);
+  useEffect(() => {
+    if (userToken === "") {
+      navigation.navigate("Login");
+    }
+  }, [userToken]);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -35,18 +42,18 @@ export default function MainTab() {
     >
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
-        options={{ headerShown: true }}
+        component={HomeStack}
+        options={{ headerShown: false }}
       />
       <Tab.Screen
         name="Categories"
-        component={CategoryScreen}
+        component={CategoryStack}
         options={{ headerShown: false }}
       />
       <Tab.Screen
         name="Cart"
         component={CartScreen}
-        options={{ headerShown: false }}
+        options={{ headerShown: true }}
       />
       <Tab.Screen
         name="Profile"
