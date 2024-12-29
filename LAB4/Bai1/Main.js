@@ -2,7 +2,7 @@ import React from "react";
 import { AuthProvider } from "./context/AuthContext";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import LoginScreen from "./screens/LoginScreen";
+import AuthStack from "./navigations/AuthStack";
 import MainTab from "./navigations/MainTab";
 import { LogBox } from "react-native";
 
@@ -21,7 +21,7 @@ export default function Main() {
         <Stack.Navigator initialRouteName="Login">
           <Stack.Screen
             name="Login"
-            component={LoginScreen}
+            component={AuthStack}
             options={{ headerShown: false }}
           />
           <Stack.Screen

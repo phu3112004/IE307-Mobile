@@ -7,49 +7,33 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import { AuthContext } from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
-import { getCartByUser, addToCart } from "../helps/helps";
+import { addToCart } from "../database/db";
 
 export default function ProductList({ data, navigation }) {
-  const { userToken } = useContext(AuthContext);
-  const user = jwtDecode(userToken);
+  const { userToken, updateCountCart, countCart } = useContext(AuthContext);
+  const user = userToken !== "" ? jwtDecode(userToken) : null;
 
   const truncateTitle = (title, maxLength) =>
     title.length > maxLength ? title.substring(0, maxLength) + "..." : title;
-  const handleAddToCart = async (userId, productId) => {
-    try {
-      const cartInfo = await getCartByUser(userId);
 
-      if (cartInfo && cartInfo.length > 0) {
-        const productIds = cartInfo[0]?.products?.map(
-          (product) => product.productId
-        );
-        if (productIds.includes(productId)) {
-          alert("This product is already in cart");
-          return;
-        }
-      }
-      var newData = {
-        id: cartInfo[0].id,
-        date: Date.now().toString(),
-        userId: cartInfo[0].userId,
-        products: [
-          ...cartInfo[0].products,
-          {
-            productId: productId,
-            quantity: 1,
-          },
-        ],
-      };
-      const result = await addToCart(cartInfo[0].id, newData);
-      alert("Product added to cart");
-      console.log("Cart updated:", result);
+  const handleAddToCart = async (userId, product) => {
+    const newProduct = {
+      productId: product.id,
+      title: product.title,
+      quantity: 1,
+      price: product.price,
+      image: product.image,
+    };
+
+    try {
+      await addToCart(userId, newProduct);
+      updateCountCart(countCart + 1);
     } catch (error) {
-      console.error("Error updating cart:", error);
-      alert("Failed to add product to cart");
+      alert(error.message);
     }
   };
 
@@ -81,7 +65,7 @@ export default function ProductList({ data, navigation }) {
               </View>
               <TouchableOpacity
                 style={styles.addButton}
-                onPress={async () => await handleAddToCart(user.sub, item.id)}
+                onPress={async () => await handleAddToCart(user.sub, item)}
               >
                 <Text style={styles.addButtonText}>+</Text>
               </TouchableOpacity>

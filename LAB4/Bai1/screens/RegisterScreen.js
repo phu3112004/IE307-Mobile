@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {
@@ -8,22 +8,10 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  Alert,
 } from "react-native";
 
-const LoginScreen = ({ navigation }) => {
-  const { logIn, userToken } = useContext(AuthContext);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  useEffect(() => {
-    if (userToken) {
-      navigation.navigate("MainTab");
-    }
-  }, [userToken]);
-
-  const handleLogin = () => {
-    logIn(username, password);
-  };
+const RegisterScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image
@@ -32,8 +20,14 @@ const LoginScreen = ({ navigation }) => {
         }}
         style={styles.logo}
       />
-      <Text style={styles.welcomeText}>Welcome</Text>
 
+      <Text style={styles.welcomeText}>Create New Account</Text>
+      <View style={styles.inputContainer}>
+        <View style={styles.iconStyleContainer}>
+          <Icon name="user" size={28} color="#000" style={styles.iconStyle} />
+        </View>
+        <TextInput style={styles.input} placeholder="Username" />
+      </View>
       <View style={styles.inputContainer}>
         <View style={styles.iconStyleContainer}>
           <Icon
@@ -43,12 +37,7 @@ const LoginScreen = ({ navigation }) => {
             style={styles.iconStyle}
           />
         </View>
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          value={username}
-          onChangeText={(text) => setUsername(text)}
-        />
+        <TextInput style={styles.input} placeholder="Email" />
       </View>
 
       <View style={styles.inputContainer}>
@@ -59,26 +48,36 @@ const LoginScreen = ({ navigation }) => {
           style={styles.input}
           placeholder="Password"
           secureTextEntry
-          value={password}
-          onChangeText={(text) => setPassword(text)}
         />
       </View>
 
-      <TouchableOpacity style={styles.forgotPasswordContainer}>
-        <Text style={styles.forgotPassword}>Forgot password?</Text>
-      </TouchableOpacity>
+      <View style={styles.inputContainer}>
+        <View style={styles.iconStyleContainer}>
+          <Icon name="lock" size={27} color="#000" style={styles.iconStyle} />
+        </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Confirm Password"
+          secureTextEntry
+        />
+      </View>
 
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginButtonText}>LOG IN</Text>
+      <TouchableOpacity
+        style={styles.loginButton}
+        onPress={() => {
+          Alert.alert("Create new account feature is not available yet");
+        }}
+      >
+        <Text style={styles.loginButtonText}>CREATE</Text>
       </TouchableOpacity>
 
       <Text style={styles.signupText}>
-        Haven't an account?{" "}
+        Already have an account?{" "}
         <Text
           style={styles.signupLink}
-          onPress={() => navigation.navigate("RegisterScreen")}
+          onPress={() => navigation.navigate("LoginScreen")}
         >
-          Sign up now!
+          Log in now!
         </Text>
       </Text>
     </View>
@@ -94,8 +93,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   logo: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     marginBottom: 20,
     borderRadius: 99,
   },
@@ -144,6 +143,22 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
+  orText: {
+    marginVertical: 10,
+    color: "#000",
+    fontWeight: "bold",
+  },
+  socialContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    width: "60%",
+    marginVertical: 10,
+  },
+  socialIcon: {
+    width: 50,
+    height: 50,
+    marginHorizontal: 16,
+  },
   signupText: {
     marginTop: 20,
     color: "#777",
@@ -154,4 +169,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default RegisterScreen;

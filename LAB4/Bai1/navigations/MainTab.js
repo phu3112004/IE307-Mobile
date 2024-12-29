@@ -1,11 +1,11 @@
 import React, { useEffect, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CartScreen from "../screens/CartScreen";
-import ProfileScreen from "../screens/ProfileScreen";
 import Icon from "react-native-vector-icons/FontAwesome";
 import CartIconWithBadge from "../badge/CartIconWithBadge";
 import HomeStack from "./HomeStack";
 import CategoryStack from "./CategoryStack";
+import ProfileStack from "./ProfileStack";
 import { AuthContext } from "../context/AuthContext";
 
 const Tab = createBottomTabNavigator();
@@ -27,9 +27,7 @@ export default function MainTab({ navigation }) {
           } else if (route.name === "Categories") {
             iconName = "list";
           } else if (route.name === "Cart") {
-            return (
-              <CartIconWithBadge badgeCount={3} color={color} size={size} />
-            );
+            return <CartIconWithBadge color={color} size={size} />;
           } else if (route.name === "Profile") {
             iconName = "user";
           }
@@ -57,7 +55,7 @@ export default function MainTab({ navigation }) {
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileStack}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>

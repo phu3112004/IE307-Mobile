@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { AuthContext } from "../context/AuthContext";
 
-function CartIconWithBadge({ badgeCount, color, size }) {
+function CartIconWithBadge({ color, size }) {
+  const { countCart } = useContext(AuthContext);
   return (
     <View style={{ width: size, height: size }}>
       <Icon name="shopping-cart" size={size} color={color} />
-      {badgeCount > 0 && (
+      {countCart > 0 && (
         <View style={styles.badge}>
-          <Text style={styles.badgeText}>{badgeCount}</Text>
+          <Text style={styles.badgeText}>{countCart}</Text>
         </View>
       )}
     </View>
