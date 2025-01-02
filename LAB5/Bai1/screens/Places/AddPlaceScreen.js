@@ -10,40 +10,18 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
+import * as MediaLibrary from "expo-media-library";
 import { Camera } from "expo-camera";
 import { addPlace, createTable } from "../../database/places";
 import { convertCoordinatesToAddress } from "../../utils/index";
+import { sendNotification } from "../../utils/notify";
 import MapView, { Marker } from "react-native-maps";
-import * as Notifications from "expo-notifications";
 
 export default function AddPlaceScreen({ navigation }) {
   const [title, setTitle] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [cameraPermission, setCameraPermission] = useState(null);
   const [location, setLocation] = useState(null);
-
-  const requestNotificationPermission = async () => {
-    const { status } = await Notifications.requestPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert(
-        "Permission required",
-        "Please allow push notifications to receive alerts."
-      );
-    }
-  };
-  useEffect(() => {
-    requestNotificationPermission();
-  }, []);
-
-  const triggerNotification = async () => {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "You've got mail! 📬",
-        body: "Check out the new places added.",
-      },
-      trigger: { seconds: 1 },
-    });
-  };
 
   const handleAddPlace = async () => {
     if (!title || !selectedImage || !location) {
@@ -64,8 +42,10 @@ export default function AddPlaceScreen({ navigation }) {
         location.longitude,
         address,
         () => {
-          Alert.alert("Place added successfully!");
-          triggerNotification();
+          sendNotification(
+            "Place added successfully",
+            "The place has been added successfully to the list."
+          );
           navigation.navigate("Places");
         }
       );
@@ -101,14 +81,32 @@ export default function AddPlaceScreen({ navigation }) {
       return;
     }
 
+    const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
+    if (!mediaLibraryPermission.granted) {
+      Alert.alert(
+        "Permission required",
+        "Please allow access to save images to your gallery."
+      );
+      return;
+    }
+
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-
       quality: 1,
     });
 
     if (!result.canceled) {
-      setSelectedImage(result.assets[0].uri);
+      const imageUri = result.assets[0].uri;
+      setSelectedImage(imageUri);
+
+      // Lưu ảnh vào thư viện máy
+      try {
+        const asset = await MediaLibrary.createAssetAsync(imageUri);
+        Alert.alert("Image Saved", "The photo has been saved to your gallery.");
+      } catch (error) {
+        console.error("Error saving image:", error);
+        Alert.alert("Error", "Could not save the image. Please try again.");
+      }
     }
   };
 
@@ -142,10 +140,6 @@ export default function AddPlaceScreen({ navigation }) {
       setLocation: (newLocation) => setLocation(newLocation),
     });
   };
-
-  useEffect(() => {
-    requestNotificationPermission();
-  }, []);
 
   return (
     <View style={styles.container}>

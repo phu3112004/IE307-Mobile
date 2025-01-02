@@ -12,11 +12,9 @@ export default function Main() {
     <NavigationContainer>
       <BottomTab.Navigator
         initialRouteName="Place"
-        tabBarOptions={{
-          activeTintColor: "#cf3339",
-          inactiveTintColor: "gray",
-        }}
         screenOptions={({ route }) => ({
+          tabBarInactiveTintColor: "gray",
+          tabBarActiveTintColor: "#cf3339",
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
             if (route.name === "Place") {
@@ -33,7 +31,11 @@ export default function Main() {
           component={PlaceStack}
           options={{ headerShown: false }}
         />
-        <BottomTab.Screen name="Media" component={MediaStack} />
+        <BottomTab.Screen
+          name="Media"
+          component={MediaStack}
+          options={{ headerShown: false }}
+        />
       </BottomTab.Navigator>
     </NavigationContainer>
   );

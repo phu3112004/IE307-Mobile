@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Image,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useCallback, useEffect } from "react";
 import { getPlaces, createTable } from "../../database/places";
@@ -12,6 +13,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 export default function ListPlaceScreen({ navigation }) {
   const [places, setPlaces] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     navigation.setOptions({
@@ -28,8 +30,10 @@ export default function ListPlaceScreen({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
+      setLoading(true);
       createTable();
       getPlaces(setPlaces);
+      setLoading(false);
     }, [])
   );
 
@@ -47,7 +51,13 @@ export default function ListPlaceScreen({ navigation }) {
       </View>
     </TouchableOpacity>
   );
-
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#cf3339" />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       {places.length > 0 ? (
