@@ -1,21 +1,55 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, StyleSheet, Alert, TouchableOpacity, Text } from "react-native";
-import { CameraView } from "expo-camera";
+import {
+  CameraView,
+  useCameraPermissions,
+  useMicrophonePermissions,
+} from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { Video } from "expo-av";
 import Icon from "react-native-vector-icons/FontAwesome";
-
-export default function RecordVideoScreen() {
+import { sendNotification } from "../../utils/notify";
+export default function RecordVideoScreen({ navigation }) {
   const [isRecording, setIsRecording] = useState(false);
   const [videoUri, setVideoUri] = useState(null);
+  const [permission, requestPermission] = useCameraPermissions();
+  const [microPermission, requestMicroPermission] = useMicrophonePermissions();
   const cameraRef = useRef(null);
+
+  useEffect(() => {
+    if (permission !== "granted") {
+      try {
+        requestPermission();
+      } catch (error) {
+        Alert.alert("Error", "Failed to get camera permission.");
+        console.error(error);
+        navigation.goBack();
+      }
+    }
+    if (microPermission !== "granted") {
+      try {
+        requestMicroPermission();
+      } catch (error) {
+        Alert.alert("Error", "Failed to get microphone permission.");
+        console.error(error);
+        navigation.goBack();
+      }
+    }
+  }, []);
 
   const startRecording = async () => {
     if (cameraRef.current) {
-      setIsRecording(true);
-      const video = await cameraRef.current.recordAsync();
-      setVideoUri(video.uri);
-      setIsRecording(false);
+      try {
+        console.log("Start recording...");
+        setIsRecording(true);
+        const video = await cameraRef.current.recordAsync();
+        setVideoUri(video.uri);
+        setIsRecording(false);
+      } catch (error) {
+        console.error("Error during recording:", error);
+        Alert.alert("Error", "Failed to record video.");
+        setIsRecording(false);
+      }
     }
   };
 
@@ -35,7 +69,11 @@ export default function RecordVideoScreen() {
     if (videoUri) {
       try {
         await MediaLibrary.createAssetAsync(videoUri);
-        Alert.alert("Success", "Video saved successfully.");
+        sendNotification(
+          "Video saved",
+          "Your video has been saved to the gallery."
+        );
+        navigation.goBack();
       } catch (error) {
         Alert.alert("Error", "Failed to save video.");
         console.error(error);
@@ -51,16 +89,29 @@ export default function RecordVideoScreen() {
             rate={1.0}
             volume={1.0}
             isMuted={false}
-            resizeMode="cover"
-            shouldPlay
+            resizeMode="contain"
+            shouldPlay={true}
+            isLooping={true}
             style={styles.video}
+            useNativeControls
           />
-          <TouchableOpacity style={styles.button} onPress={saveVideo}>
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableOpacity>
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => setVideoUri(null)}
+            >
+              <Text style={styles.buttonText}>Re record</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: "#cf3339" }]}
+              onPress={saveVideo}
+            >
+              <Text style={styles.buttonText}>Save</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       ) : (
-        <CameraView style={styles.camera} ref={cameraRef}>
+        <CameraView mode="video" style={styles.camera} ref={cameraRef}>
           <View style={styles.cameraControls}>
             <TouchableOpacity
               style={styles.recordButton}
@@ -82,10 +133,11 @@ export default function RecordVideoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: "100%",
   },
   camera: {
-    height: "100%",
     flex: 1,
+    height: "100%",
     justifyContent: "flex-end",
   },
   cameraControls: {
@@ -109,13 +161,14 @@ const styles = StyleSheet.create({
   },
   video: {
     width: "100%",
-    height: 300,
+    height: 600,
   },
   button: {
     backgroundColor: "#28A745",
     padding: 10,
-    marginTop: 20,
+    marginTop: 10,
     borderRadius: 5,
+    marginHorizontal: 10,
   },
   buttonText: {
     color: "white",

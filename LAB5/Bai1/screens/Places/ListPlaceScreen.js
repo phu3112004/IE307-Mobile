@@ -51,13 +51,6 @@ export default function ListPlaceScreen({ navigation }) {
       </View>
     </TouchableOpacity>
   );
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#cf3339" />
-      </View>
-    );
-  }
   return (
     <View style={styles.container}>
       {places.length > 0 ? (
@@ -67,10 +60,16 @@ export default function ListPlaceScreen({ navigation }) {
           renderItem={renderPlaceItem}
           contentContainerStyle={{ paddingBottom: 20 }}
         />
+      ) : loading ? (
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <ActivityIndicator size="large" color="#cf3339" />
+        </View>
       ) : (
-        <Text style={{ textAlign: "center" }}>
-          No places added yet! Start adding some.
-        </Text>
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <Text style={{ textAlign: "center" }}>
+            No places added yet! Start adding some.
+          </Text>
+        </View>
       )}
     </View>
   );

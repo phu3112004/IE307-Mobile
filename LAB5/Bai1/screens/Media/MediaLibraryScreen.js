@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   FlatList,
@@ -6,12 +6,16 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Text,
+  ActivityIndicator,
 } from "react-native";
 import * as MediaLibrary from "expo-media-library";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function MediaLibraryScreen({ navigation }) {
   const [mediaFiles, setMediaFiles] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     navigation.setOptions({
@@ -25,28 +29,34 @@ export default function MediaLibraryScreen({ navigation }) {
       ),
     });
   }, []);
-  useEffect(() => {
-    const fetchMediaFiles = async () => {
-      const { status } = await MediaLibrary.requestPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert(
-          "Permission required",
-          "Please allow access to your media files."
-        );
-        return;
-      }
 
-      const media = await MediaLibrary.getAssetsAsync({
-        mediaType: [MediaLibrary.MediaType.photo, MediaLibrary.MediaType.video],
-        first: 15, // Chỉ lấy 10-15 tệp
-        sortBy: [MediaLibrary.SortBy.creationTime],
-      });
+  useFocusEffect(
+    useCallback(() => {
+      const fetchMediaFiles = async () => {
+        const { status } = await MediaLibrary.requestPermissionsAsync();
+        if (status !== "granted") {
+          Alert.alert(
+            "Permission required",
+            "Please allow access to your media files."
+          );
+          return;
+        }
 
-      setMediaFiles(media.assets);
-    };
+        const media = await MediaLibrary.getAssetsAsync({
+          mediaType: [
+            MediaLibrary.MediaType.photo,
+            MediaLibrary.MediaType.video,
+          ],
+          first: 16,
+          sortBy: [MediaLibrary.SortBy.creationTime],
+        });
+        setLoading(false);
+        setMediaFiles(media.assets);
+      };
 
-    fetchMediaFiles();
-  }, []);
+      fetchMediaFiles();
+    }, [])
+  );
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.mediaItem}>
@@ -56,13 +66,19 @@ export default function MediaLibraryScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={mediaFiles}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        numColumns={2}
-        contentContainerStyle={styles.list}
-      />
+      {mediaFiles.length > 0 ? (
+        <FlatList
+          data={mediaFiles}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          numColumns={2}
+          contentContainerStyle={styles.list}
+        />
+      ) : loading ? (
+        <ActivityIndicator color="#cf3339" size="large" />
+      ) : (
+        <Text>No media files found.</Text>
+      )}
     </View>
   );
 }
@@ -71,6 +87,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#ddd",
+    padding: 10,
   },
   list: {
     paddingHorizontal: 10,
@@ -93,5 +110,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
     alignItems: "center",
     justifyContent: "center",
+  },
+  mediaImage: {
+    width: 80,
+    height: 80,
+    margin: 5,
   },
 });

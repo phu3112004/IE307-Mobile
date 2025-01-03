@@ -102,7 +102,6 @@ export default function AddPlaceScreen({ navigation }) {
       // Lưu ảnh vào thư viện máy
       try {
         const asset = await MediaLibrary.createAssetAsync(imageUri);
-        Alert.alert("Image Saved", "The photo has been saved to your gallery.");
       } catch (error) {
         console.error("Error saving image:", error);
         Alert.alert("Error", "Could not save the image. Please try again.");

@@ -31,7 +31,6 @@
     "expo-permissions": "^14.4.0",
     "expo-sqlite": "^15.0.3",
     "expo-status-bar": "~2.0.0",
-    "expo-video": "^2.0.3",
     "ie": "file:",
     "json-server": "^1.0.0-beta.3",
     "jwt-decode": "^4.0.0",
@@ -49,6 +48,7 @@
     "react-native-sqlite-storage": "^6.0.1",
     "react-native-vector-icons": "^10.2.0",
     "react-native-video": "^6.8.2",
+    "react-native-video-controls": "^2.8.1",
     "react-native-vision-camera": "^4.6.3",
     "react-native-webview": "^13.12.5",
     "sqlite3": "^5.1.7"
