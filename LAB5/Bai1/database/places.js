@@ -30,7 +30,6 @@ export const addPlace = async (
   callback();
 };
 
-// Lấy tất cả các ghi chú
 export const getPlaces = async (callback) => {
   try {
     const result = await db.getAllAsync("SELECT * FROM places");
@@ -38,20 +37,4 @@ export const getPlaces = async (callback) => {
   } catch (error) {
     console.error("Error getting places:", error);
   }
-};
-
-// Cập nhật ghi chú
-export const updatePlace = async (id, title, content, callback) => {
-  await db.runAsync("UPDATE places SET title = ?, content = ? WHERE id = ?", [
-    title,
-    content,
-    id,
-  ]);
-  callback();
-};
-
-// Xóa ghi chú
-export const deletePlace = async (id, callback) => {
-  await db.runAsync("DELETE FROM places WHERE id = ?", [id]);
-  callback();
 };
